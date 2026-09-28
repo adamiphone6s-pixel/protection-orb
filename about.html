@@ -4,23 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Védőkör Szakszervezet</title>
-  <meta name="description" content="Munkavállalói érdekképviselet több vállalatnál — jogsegély, bértárgyalás, támogatás.">
+  <meta name="description" content="Munkavállalók alapították munkavállalóknak: küldetésünk, értékeink, történetünk és vezetőségünk.">
   <meta name="theme-color" content="#0b0a1a">
+  <link rel="canonical" href="https://protection-orb.vercel.app/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Védőkör Szakszervezet">
+  <meta property="og:title" content="Rólunk · Védőkör Szakszervezet">
+  <meta property="og:description" content="Munkavállalók alapították munkavállalóknak: küldetésünk, értékeink, történetünk és vezetőségünk.">
+  <meta property="og:url" content="https://protection-orb.vercel.app/about.html">
+  <meta property="og:image" content="https://protection-orb.vercel.app/assets/img/og.png">
+  <meta property="og:locale" content="hu_HU">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/icon-192.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preload" href="assets/fonts/Unbounded-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Manrope-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=2">
+  <link rel="stylesheet" href="assets/css/style.css?v=2">
 </head>
 <body data-page="about" data-title-key="nav.about">
 <main id="main">
   <section class="page-hero dark">
-    <div class="blob" aria-hidden="true"></div>
+    <div class="ph-orb" aria-hidden="true"><canvas data-gl-orb></canvas></div>
     <div class="container">
       <span class="eyebrow fade-up" data-i18n="about.eyebrow"></span>
-      <h1 class="h-xl fade-up d2" style="margin-top:24px" data-i18n-html="about.title"></h1>
+      <h1 class="h-xl" data-split data-split-manual style="margin-top:24px" data-i18n-html="about.title"></h1>
       <p class="lead muted fade-up d3" data-i18n="about.lead"></p>
     </div>
   </section>
@@ -76,16 +86,20 @@
     </div>
   </section>
 
-  <section class="section dark cta">
-    <div class="cta-orb" aria-hidden="true"><canvas data-orb="plain" data-count="700"></canvas></div>
-    <div class="container reveal">
-      <h2 class="h-xl" data-i18n-html="cta.title"></h2>
-      <p class="lead" data-i18n="cta.lead"></p>
-      <a class="btn btn--volt" href="join.html"><span data-i18n="cta.btn"></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  <section class="cta dark">
+    <div class="cta-orb" aria-hidden="true"><canvas data-orb data-count="800"></canvas></div>
+    <div class="container">
+      <h2 class="h-xl" data-split data-i18n-html="cta.title"></h2>
+      <p class="lead reveal" data-i18n="cta.lead"></p>
+      <a data-magnetic class="btn btn--volt reveal" href="join.html" data-magnetic><span class="roll"><span data-i18n="cta.btn"></span></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </section>
 </main>
-<script src="assets/js/i18n.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/js/i18n.js?v=2" defer></script>
+<script src="assets/js/orb-gl.js?v=2" defer></script>
+<script src="assets/js/app.js?v=2" defer></script>
 </body>
 </html>

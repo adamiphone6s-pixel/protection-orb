@@ -1,69 +1,78 @@
 /* ==========================================================================
-   Védőkör — közös funkciók: layout, nyelvváltás, animációk, hírek, űrlapok, PWA
+   Védőkör — közös motor: layout, nyelv, mozgás, hírek, űrlapok, PWA
+   Külső függőségek (opcionálisak, helyben kiszolgálva): GSAP + ScrollTrigger, Lenis.
+   Nélkülük is minden működik, csak egyszerűbb animációkkal.
    ========================================================================== */
 (function () {
   "use strict";
 
   const LANG_KEY = "vk-lang";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const hasGSAP = !!(window.gsap && window.ScrollTrigger);
+  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
+  const page = document.body.dataset.page;
 
-  /* ---------- Nyelv ---------- */
-  function storage(fn, fallback) {
-    try { return fn(); } catch (e) { return fallback; }
-  }
+  function store(fn, fallback) { try { return fn(); } catch (e) { return fallback; } }
+  const ss = {
+    get: (k) => store(() => sessionStorage.getItem(k), null),
+    set: (k, v) => store(() => sessionStorage.setItem(k, v)),
+    del: (k) => store(() => sessionStorage.removeItem(k))
+  };
+
+  /* ================= Nyelv ================= */
   function detectLang() {
     const url = new URLSearchParams(location.search).get("lang");
     if (url === "hu" || url === "en") return url;
-    const saved = storage(() => localStorage.getItem(LANG_KEY), null);
-    if (saved === "hu" || saved === "en") return saved;
-    return "hu";
+    const saved = store(() => localStorage.getItem(LANG_KEY), null);
+    return saved === "hu" || saved === "en" ? saved : "hu";
   }
   let lang = detectLang();
-
   function t(key) {
     const dict = window.I18N[lang] || {};
     return key in dict ? dict[key] : (window.I18N.hu[key] || key);
   }
-  // Kétnyelvű JSON-mező: { hu: "...", en: "..." } vagy sima szöveg
-  function tr(value) {
-    if (value && typeof value === "object") return value[lang] || value.hu || "";
-    return value == null ? "" : String(value);
+  function tr(v) {
+    if (v && typeof v === "object") return v[lang] || v.hu || "";
+    return v == null ? "" : String(v);
   }
-
   function applyI18n(root) {
-    (root || document).querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
-    (root || document).querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
-    (root || document).querySelectorAll("[data-i18n-attr]").forEach((el) => {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach((el) => {
+      const v = t(el.dataset.i18n);
+      el.textContent = v;
+      el.setAttribute("data-t", v);
+    });
+    root.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach((el) => {
       el.dataset.i18nAttr.split(";").forEach((pair) => {
         const [attr, key] = pair.split(":").map((s) => s.trim());
         if (attr && key) el.setAttribute(attr, t(key));
       });
     });
   }
-
   function setLang(next) {
     lang = next;
-    storage(() => localStorage.setItem(LANG_KEY, next));
+    store(() => localStorage.setItem(LANG_KEY, next));
     document.documentElement.lang = next;
     applyI18n();
+    splitAll();
+    initManifesto();
     const titleKey = document.body.dataset.titleKey;
-    document.title = (titleKey ? t(titleKey) + " · " : "") + t("brand.name") + " " + t("brand.tag");
-    document.querySelectorAll(".lang-toggle span").forEach((s) => s.classList.toggle("is-active", s.dataset.lang === next));
+    document.title = (titleKey ? t(titleKey).replace(/<[^>]+>/g, "") + " · " : "") + t("brand.name") + " " + t("brand.tag");
+    document.querySelectorAll(".lang-toggle").forEach((b) => {
+      b.classList.toggle("is-en", next === "en");
+      b.querySelectorAll("span").forEach((s) => s.classList.toggle("is-active", s.dataset.lang === next));
+    });
     document.dispatchEvent(new CustomEvent("langchange", { detail: { lang: next } }));
+    if (hasGSAP) requestAnimationFrame(() => ScrollTrigger.refresh());
   }
 
-  /* ---------- Ikonok ---------- */
+  /* ================= Ikonok ================= */
   const ICONS = {
-    scale: '<path d="M12 3v18M5 21h14M4 8h16M7 8l-3 7a3 3 0 0 0 6 0L7 8Zm10 0-3 7a3 3 0 0 0 6 0l-3-7Z"/>',
-    chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
-    heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/>',
-    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-    spark: '<path d="M12 3l2.2 5.6L20 11l-5.8 2.4L12 19l-2.2-5.6L4 11l5.8-2.4L12 3Z"/>',
-    phone: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
-    arrowUpRight: '<path d="M7 17 17 7M8 7h9v9"/>',
+    arrowUp: '<path d="M12 19V5M6 11l6-6 6 6"/>',
     close: '<path d="M6 6l12 12M18 6 6 18"/>',
-    eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
     download: '<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
     call: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
@@ -74,16 +83,16 @@
   function icon(name, extra) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + (extra || "") + ">" + (ICONS[name] || "") + "</svg>";
   }
-  window.VK_ICON = icon;
+  const ARROW = icon("arrow", ' class="arrow" width="18" height="18"');
+  const roll = (key) => '<span class="roll"><span data-i18n="' + key + '"></span></span>';
 
   const LOGO_MARK =
     '<svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">' +
     '<defs><radialGradient id="lg" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#c8ff2e"/><stop offset=".55" stop-color="#7b5cff"/><stop offset="1" stop-color="#2a1f7a"/></radialGradient></defs>' +
     '<circle cx="20" cy="20" r="14" fill="url(#lg)"/>' +
-    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-24 20 20)" opacity=".9"/>' +
-    "</svg>";
+    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-24 20 20)" opacity=".9"/></svg>';
 
-  /* ---------- Layout ---------- */
+  /* ================= Layout ================= */
   const NAV = [
     { href: "index.html", key: "nav.home", page: "home" },
     { href: "about.html", key: "nav.about", page: "about" },
@@ -92,21 +101,21 @@
     { href: "join.html", key: "nav.join", page: "join" },
     { href: "contact.html", key: "nav.contact", page: "contact" }
   ];
-  const page = document.body.dataset.page;
+  let lenis = null;
 
   function renderHeader() {
     const header = document.createElement("header");
     header.className = "site-header";
     header.innerHTML =
       '<div class="container header-inner">' +
-      '<a class="logo" href="index.html">' + LOGO_MARK + '<span><span data-i18n="brand.name"></span><small data-i18n="brand.tag"></small></span></a>' +
+      '<a class="logo" href="index.html" aria-label="Védőkör">' + LOGO_MARK + '<span><span data-i18n="brand.name"></span><small data-i18n="brand.tag"></small></span></a>' +
       '<nav class="main-nav" aria-label="Fő navigáció"><ul>' +
       NAV.filter((n) => n.page !== "home").map((n) =>
-        '<li><a href="' + n.href + '" data-i18n="' + n.key + '"' + (n.page === page ? ' aria-current="page"' : "") + "></a></li>").join("") +
+        '<li><a href="' + n.href + '"' + (n.page === page ? ' aria-current="page"' : "") + ">" + roll(n.key) + "</a></li>").join("") +
       "</ul></nav>" +
       '<div class="header-actions">' +
       '<button class="lang-toggle" type="button" data-i18n-attr="aria-label:lang.switch"><span data-lang="hu">HU</span><span data-lang="en">EN</span></button>' +
-      '<a class="btn btn--volt btn--sm" href="login.html"><span data-i18n="nav.members"></span>' + icon("arrow", ' class="arrow" width="18" height="18"') + "</a>" +
+      '<a class="btn btn--volt btn--sm" href="login.html" data-magnetic>' + roll("nav.members") + ARROW + "</a>" +
       '<button class="burger" type="button" aria-expanded="false" aria-controls="mobile-menu" data-i18n-attr="aria-label:nav.menu"><span></span><span></span></button>' +
       "</div></div>";
 
@@ -119,11 +128,11 @@
     menu.className = "mobile-menu";
     menu.id = "mobile-menu";
     menu.innerHTML =
-      "<nav aria-label=\"Mobil navigáció\"><ul>" +
-      NAV.map((n, i) =>
-        '<li><a class="mm-link" href="' + n.href + '"' + (n.page === page ? ' aria-current="page"' : "") + "><small>0" + (i + 1) + '</small><span data-i18n="' + n.key + '"></span></a></li>').join("") +
+      '<nav aria-label="Mobil navigáció"><ul>' +
+      NAV.map((n, i) => '<li><a class="mm-link" href="' + n.href + '"' + (n.page === page ? ' aria-current="page"' : "") + "><small>0" + (i + 1) + '</small><span data-i18n="' + n.key + '"></span></a></li>').join("") +
       "</ul></nav>" +
-      '<div class="mm-foot"><a class="btn btn--volt btn--block" href="login.html"><span data-i18n="nav.members"></span>' + icon("arrow", ' class="arrow" width="18" height="18"') + "</a></div>";
+      '<div class="mm-foot"><a class="btn btn--volt btn--block" href="login.html"><span data-i18n="nav.members"></span>' + ARROW + "</a>" +
+      '<div class="mm-contact"><a href="mailto:info@vedokor.hu">info@vedokor.hu</a><a href="tel:+3610000000">+36 1 000 0000</a></div></div>';
 
     document.body.prepend(menu);
     document.body.prepend(header);
@@ -133,25 +142,23 @@
 
     const burger = header.querySelector(".burger");
     function toggleMenu(open) {
-      document.documentElement.classList.toggle("menu-open", open);
       document.body.classList.toggle("menu-open", open);
       burger.setAttribute("aria-expanded", String(open));
       burger.setAttribute("aria-label", t(open ? "nav.close" : "nav.menu"));
       menu.inert = !open;
+      if (lenis) open ? lenis.stop() : lenis.start();
     }
     menu.inert = true;
     burger.addEventListener("click", () => toggleMenu(!document.body.classList.contains("menu-open")));
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") toggleMenu(false); });
-    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => toggleMenu(false)));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && document.body.classList.contains("menu-open")) toggleMenu(false); });
 
-    // Scroll állapot: háttér + elrejtés lefelé görgetéskor
     let lastY = window.scrollY;
     function onScroll() {
       const y = window.scrollY;
       header.classList.toggle("is-scrolled", y > 24);
       if (!document.body.classList.contains("menu-open")) {
-        header.classList.toggle("is-hidden", y > 400 && y > lastY + 4);
-        if (y < lastY - 4) header.classList.remove("is-hidden");
+        if (y > 400 && y > lastY + 4) header.classList.add("is-hidden");
+        else if (y < lastY - 4 || y < 400) header.classList.remove("is-hidden");
       }
       lastY = y;
     }
@@ -163,217 +170,521 @@
     if (document.body.dataset.noFooter !== undefined) return;
     const footer = document.createElement("footer");
     footer.className = "site-footer";
-    const year = new Date().getFullYear();
     footer.innerHTML =
-      '<div class="container">' +
-      '<div class="footer-grid">' +
+      '<div class="container"><div class="footer-grid">' +
       '<div><a class="logo" href="index.html">' + LOGO_MARK + '<span><span data-i18n="brand.name"></span><small data-i18n="brand.tag"></small></span></a>' +
       '<p data-i18n="footer.about"></p>' +
-      '<div class="socials"><a href="#" aria-label="Facebook">' + icon("fb") + '</a><a href="#" aria-label="Instagram">' + icon("ig") + '</a><a href="#" aria-label="YouTube">' + icon("yt") + "</a></div></div>" +
-      '<div><h4 data-i18n="footer.nav"></h4><ul>' +
-      NAV.map((n) => '<li><a href="' + n.href + '" data-i18n="' + n.key + '"></a></li>').join("") + "</ul></div>" +
+      '<div class="socials"><a href="#" aria-label="Facebook" data-magnetic>' + icon("fb") + '</a><a href="#" aria-label="Instagram" data-magnetic>' + icon("ig") + '</a><a href="#" aria-label="YouTube" data-magnetic>' + icon("yt") + "</a></div></div>" +
+      '<div><h4 data-i18n="footer.nav"></h4><ul>' + NAV.map((n) => '<li><a href="' + n.href + '">' + roll(n.key) + "</a></li>").join("") + "</ul></div>" +
       '<div><h4 data-i18n="nav.members"></h4><ul>' +
-      '<li><a href="login.html" data-i18n="login.title"></a></li>' +
-      '<li><a href="join.html" data-i18n="nav.join"></a></li>' +
-      '<li><a href="privacy.html" data-i18n="footer.privacy"></a></li></ul></div>' +
+      '<li><a href="login.html">' + roll("login.title") + "</a></li>" +
+      '<li><a href="join.html">' + roll("nav.join") + "</a></li>" +
+      '<li><a href="privacy.html">' + roll("footer.privacy") + "</a></li></ul></div>" +
       '<div><h4 data-i18n="footer.contact"></h4><ul>' +
       '<li><a href="mailto:info@vedokor.hu">info@vedokor.hu</a></li>' +
       '<li><a href="tel:+3610000000">+36 1 000 0000</a></li>' +
       '<li><span class="muted" data-i18n="contact.address"></span></li></ul></div>' +
       "</div>" +
-      '<div class="footer-bottom"><span>© ' + year + ' <span data-i18n="brand.name"></span> <span data-i18n="brand.tag"></span>. <span data-i18n="footer.rights"></span></span>' +
-      '<button type="button" class="install-link" hidden data-i18n="footer.install"></button></div>' +
-      '</div><div class="footer-word" aria-hidden="true">Védőkör</div>';
+      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' <span data-i18n="brand.name"></span> <span data-i18n="brand.tag"></span>. <span data-i18n="footer.rights"></span></span>' +
+      '<button type="button" class="install-link" hidden data-i18n="footer.install"></button>' +
+      '<a href="#main" class="to-top" data-top>' + icon("arrowUp", ' width="16" height="16"') + '<span class="roll"><span data-i18n="footer.top"></span></span></a></div></div>' +
+      '<div class="footer-word" aria-hidden="true">' + "Védőkör".split("").map((c, i) => '<span style="--i:' + i + '">' + c + "</span>").join("") + "</div>";
     document.body.appendChild(footer);
+    footer.querySelector("[data-top]").addEventListener("click", (e) => {
+      e.preventDefault();
+      lenis ? lenis.scrollTo(0, { duration: 1.8 }) : window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    });
   }
 
-  /* ---------- Animált védőgömb (canvas) ---------- */
-  function Orb(canvas, opts) {
-    opts = Object.assign({ count: 1100, rings: true, interactive: true }, opts || {});
+  /* ================= Szövegfelbontás ================= */
+  function splitEl(el) {
+    const mode = el.dataset.split === "chars" ? "chars" : "words";
+    let i = 0;
+    (function walk(node) {
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+            const w = document.createElement("span");
+            w.className = "w";
+            if (mode === "chars") {
+              Array.from(part).forEach((ch) => {
+                const c = document.createElement("span");
+                c.className = "c";
+                c.style.setProperty("--i", i++);
+                c.textContent = ch;
+                w.appendChild(c);
+              });
+            } else {
+              const wi = document.createElement("span");
+              wi.className = "wi";
+              wi.style.setProperty("--i", i++);
+              wi.textContent = part;
+              w.appendChild(wi);
+            }
+            frag.appendChild(w);
+          });
+          child.replaceWith(frag);
+        } else if (child.nodeType === 1 && !child.classList.contains("w")) {
+          walk(child);
+        }
+      });
+    })(el);
+    if (!el.getAttribute("aria-label")) {
+      el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
+    }
+    el.querySelectorAll(".w").forEach((w) => w.setAttribute("aria-hidden", "true"));
+  }
+  function splitAll() {
+    document.querySelectorAll("[data-split]").forEach((el) => {
+      if (el.querySelector(".w")) {
+        // nyelvváltás után az i18n újraírta a tartalmat → ha még van .w, nem kell újra
+        return;
+      }
+      el.removeAttribute("aria-label");
+      splitEl(el);
+    });
+  }
+
+  /* ================= Kiáltvány: szavankénti kivilágítás ================= */
+  let manifestoWords = [];
+  function initManifesto() {
+    const el = document.querySelector("[data-manifesto]");
+    if (!el) return;
+    el.innerHTML = el.textContent.split(/\s+/).map((w) => '<span class="mw">' + w + "</span>").join(" ");
+    manifestoWords = Array.from(el.querySelectorAll(".mw"));
+    updateManifesto();
+  }
+  function updateManifesto() {
+    if (!manifestoWords.length) return;
+    const el = manifestoWords[0].parentElement;
+    const r = el.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const p = Math.min(1, Math.max(0, (vh * 0.82 - r.top) / (r.height + vh * 0.3)));
+    const n = reduceMotion ? manifestoWords.length : Math.round(p * manifestoWords.length);
+    manifestoWords.forEach((w, i) => w.classList.toggle("on", i < n));
+  }
+
+  /* ================= WebGL gömb + 2D fallback ================= */
+  function Orb2D(canvas, opts) {
+    opts = Object.assign({ count: 900 }, opts || {});
     const ctx = canvas.getContext("2d");
     const pts = [];
     const golden = Math.PI * (3 - Math.sqrt(5));
     for (let i = 0; i < opts.count; i++) {
-      const y = 1 - (i / (opts.count - 1)) * 2;
-      const r = Math.sqrt(1 - y * y);
-      const th = golden * i;
+      const y = 1 - (i / (opts.count - 1)) * 2, r = Math.sqrt(1 - y * y), th = golden * i;
       pts.push([Math.cos(th) * r, y, Math.sin(th) * r, Math.random()]);
     }
-    let w = 0, h = 0, dpr = 1, running = false, visible = true, raf = 0;
-    let rotX = -0.35, rotY = 0, targetX = -0.35, targetY = 0, t0 = performance.now();
-
+    let w = 0, h = 0, running = false, raf = 0, visible = true;
+    let rotX = -0.35, rotY = 0, tx = -0.35, ty = 0;
+    const t0 = performance.now();
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2), rect = canvas.getBoundingClientRect();
       w = rect.width; h = rect.height;
       canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       draw(performance.now());
     }
-
     function draw(now) {
       const time = (now - t0) / 1000;
       ctx.clearRect(0, 0, w, h);
       const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.34;
-      rotX += (targetX - rotX) * 0.04;
-      rotY += (targetY - rotY) * 0.04;
-      const ay = time * 0.18 + rotY, ax = rotX;
-      const cosY = Math.cos(ay), sinY = Math.sin(ay), cosX = Math.cos(ax), sinX = Math.sin(ax);
-
-      // Belső izzás
-      const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.35, R * 0.1, cx, cy, R * 1.25);
-      g.addColorStop(0, "rgba(200,255,46,0.22)");
-      g.addColorStop(0.45, "rgba(123,92,255,0.18)");
-      g.addColorStop(1, "rgba(11,10,26,0)");
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(cx, cy, R * 1.25, 0, Math.PI * 2); ctx.fill();
-
-      // Pontfelhő: „pulzáló” gömb
+      rotX += (tx - rotX) * 0.04; rotY += (ty - rotY) * 0.04;
+      const ay = time * 0.15 + rotY, cY = Math.cos(ay), sY = Math.sin(ay), cX = Math.cos(rotX), sX = Math.sin(rotX);
       for (let i = 0; i < pts.length; i++) {
-        const p = pts[i];
-        const breathe = 1 + Math.sin(time * 1.2 + p[3] * 6.28) * 0.018;
-        let x = p[0] * breathe, y = p[1] * breathe, z = p[2] * breathe;
-        let x1 = x * cosY - z * sinY, z1 = x * sinY + z * cosY;
-        let y1 = y * cosX - z1 * sinX, z2 = y * sinX + z1 * cosX;
-        const persp = 2.4 / (2.4 - z2);
-        const sx = cx + x1 * R * persp, sy = cy + y1 * R * persp;
-        const depth = (z2 + 1) / 2; // 0 hátul, 1 elöl
-        const size = (0.5 + depth * 1.9) * (w > 600 ? 1 : 0.8);
-        // szín: volt (fent-elöl) → violet → coral (lent)
-        const mix = (y1 + 1) / 2;
-        let r, gg, b;
-        if (mix < 0.5) { const k = mix / 0.5; r = 200 + (123 - 200) * k; gg = 255 + (92 - 255) * k; b = 46 + (255 - 46) * k; }
-        else { const k = (mix - 0.5) / 0.5; r = 123 + (255 - 123) * k; gg = 92 + (106 - 92) * k; b = 255 + (61 - 255) * k; }
-        ctx.fillStyle = "rgba(" + (r | 0) + "," + (gg | 0) + "," + (b | 0) + "," + (0.12 + depth * 0.88).toFixed(3) + ")";
-        ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI * 2); ctx.fill();
-      }
-
-      // Védő gyűrűk (orbit)
-      if (opts.rings) {
-        for (let k = 0; k < 3; k++) {
-          const tilt = -0.42 + k * 0.5 + Math.sin(time * 0.3 + k) * 0.05;
-          const rr = R * (1.28 + k * 0.16);
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(tilt);
-          ctx.scale(1, 0.26 + k * 0.05);
-          ctx.beginPath(); ctx.arc(0, 0, rr, 0, Math.PI * 2);
-          ctx.restore();
-          ctx.strokeStyle = k === 0 ? "rgba(200,255,46,0.55)" : "rgba(239,237,248," + (0.18 - k * 0.04) + ")";
-          ctx.lineWidth = k === 0 ? 1.4 : 1;
-          ctx.stroke();
-          // Keringő „szatellit”
-          const a = time * (0.6 - k * 0.15) + k * 2;
-          const px = Math.cos(a) * rr, py = Math.sin(a) * rr * (0.26 + k * 0.05);
-          const sx = cx + px * Math.cos(tilt) - py * Math.sin(tilt);
-          const sy = cy + px * Math.sin(tilt) + py * Math.cos(tilt);
-          ctx.fillStyle = k === 0 ? "#c8ff2e" : k === 1 ? "#ff6a3d" : "#5ce1ff";
-          ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 16;
-          ctx.beginPath(); ctx.arc(sx, sy, k === 0 ? 5 : 3.5, 0, Math.PI * 2); ctx.fill();
-          ctx.shadowBlur = 0;
-        }
+        const p = pts[i], br = 1 + Math.sin(time * 1.2 + p[3] * 6.28) * 0.02;
+        const x = p[0] * br, y = p[1] * br, z = p[2] * br;
+        const x1 = x * cY - z * sY, z1 = x * sY + z * cY, y1 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
+        const persp = 2.4 / (2.4 - z2), depth = (z2 + 1) / 2, mix = (y1 + 1) / 2;
+        let r, g, b;
+        if (mix < 0.5) { const k = mix / 0.5; r = 200 - 77 * k; g = 255 - 163 * k; b = 46 + 209 * k; }
+        else { const k = (mix - 0.5) / 0.5; r = 123 + 132 * k; g = 92 + 14 * k; b = 255 - 194 * k; }
+        ctx.fillStyle = "rgba(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + "," + (0.1 + depth * 0.9).toFixed(3) + ")";
+        ctx.beginPath(); ctx.arc(cx + x1 * R * persp, cy + y1 * R * persp, 0.5 + depth * 1.8, 0, 6.2832); ctx.fill();
       }
     }
-
-    function loop(now) {
-      if (!running) return;
-      draw(now);
-      raf = requestAnimationFrame(loop);
-    }
+    function loop(now) { if (!running) return; draw(now); raf = requestAnimationFrame(loop); }
     function start() { if (running || reduceMotion || !visible || document.hidden) return; running = true; raf = requestAnimationFrame(loop); }
     function stop() { running = false; cancelAnimationFrame(raf); }
-
-    if (opts.interactive && !reduceMotion) {
-      window.addEventListener("pointermove", (e) => {
-        targetY = (e.clientX / window.innerWidth - 0.5) * 1.1;
-        targetX = -0.35 + (e.clientY / window.innerHeight - 0.5) * 0.7;
-      }, { passive: true });
-    }
-    new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting;
-      visible ? start() : stop();
-    }).observe(canvas);
+    if (!reduceMotion) window.addEventListener("pointermove", (e) => { ty = (e.clientX / innerWidth - 0.5) * 1.1; tx = -0.35 + (e.clientY / innerHeight - 0.5) * 0.7; }, { passive: true });
+    new IntersectionObserver((en) => { visible = en[0].isIntersecting; visible ? start() : stop(); }).observe(canvas);
     document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
-    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(canvas); else window.addEventListener("resize", resize);
-    resize();
-    start();
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(canvas); else addEventListener("resize", resize);
+    resize(); start();
+    return { setScroll() {}, setHover() {} };
+  }
+  const orbs = [];
+  function initOrbs() {
+    document.querySelectorAll("canvas[data-gl-orb]").forEach((c) => {
+      const inst = (window.VKOrbGL && window.VKOrbGL(c)) || Orb2D(c);
+      inst.el = c;
+      orbs.push(inst);
+    });
+    document.querySelectorAll("canvas[data-orb]").forEach((c) => Orb2D(c, { count: Number(c.dataset.count) || 900 }));
   }
 
-  /* ---------- Scroll-animációk ---------- */
-  function initReveal() {
-    const els = document.querySelectorAll(".reveal");
+  /* ================= Sima görgetés (Lenis) ================= */
+  function initSmoothScroll() {
+    if (!window.Lenis || reduceMotion) return;
+    lenis = new Lenis({ lerp: 0.1, smoothWheel: true, anchors: { offset: -90 } });
+    if (hasGSAP) {
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    }
+  }
+
+  /* ================= Görgetéshez kötött effektek ================= */
+  let velocity = 0, lastScroll = window.scrollY;
+  function scrollTick() {
+    const y = window.scrollY;
+    const v = lenis ? lenis.velocity : y - lastScroll;
+    velocity += (v - velocity) * 0.2;
+    lastScroll = y;
+    updateManifesto();
+    const hero = document.querySelector(".hero");
+    if (hero && orbs[0]) {
+      const p = Math.min(1, Math.max(0, y / (hero.offsetHeight || 1)));
+      orbs[0].setScroll(p);
+    }
+  }
+
+  function initMarquees() {
+    const tracks = document.querySelectorAll(".marquee-track");
+    if (!tracks.length) return;
+    if (reduceMotion) return;
+    const state = Array.from(tracks).map((el) => ({ el, x: 0, dir: Number(el.dataset.dir || -1), w: 0 }));
+    function measure() { state.forEach((s) => { s.w = s.el.scrollWidth / 2; }); }
+    measure();
+    addEventListener("resize", measure);
+    document.addEventListener("langchange", () => requestAnimationFrame(measure));
+    let scrollDir = 1;
+    (function tick() {
+      const v = velocity;
+      if (Math.abs(v) > 0.5) scrollDir = v > 0 ? 1 : -1;
+      const speed = 1 + Math.min(Math.abs(v) * 0.35, 14);
+      state.forEach((s) => {
+        s.x += s.dir * speed * scrollDir;
+        if (s.w) { if (s.x <= -s.w) s.x += s.w; if (s.x > 0) s.x -= s.w; }
+        const skew = Math.max(-10, Math.min(10, v * 0.3));
+        s.el.style.transform = "translate3d(" + s.x + "px,0,0) skewX(" + (-skew * s.dir * -1) + "deg)";
+      });
+      requestAnimationFrame(tick);
+    })();
+  }
+
+  function initGSAPScenes() {
+    const mm = hasGSAP && !reduceMotion ? gsap.matchMedia() : null;
+
+    // Vízszintes szolgáltatás-szekció
+    document.querySelectorAll("[data-hs]").forEach((section) => {
+      const track = section.querySelector(".hs-track");
+      const bar = section.querySelector(".hs-progress i");
+      if (!mm) { section.classList.add("hs-native"); return; }
+      mm.add("(min-width: 900px)", () => {
+        section.classList.remove("hs-native");
+        const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+        const tween = gsap.to(track, {
+          x: () => -dist(), ease: "none",
+          scrollTrigger: {
+            trigger: section, start: "top top", end: () => "+=" + dist(), pin: true, scrub: 0.8, invalidateOnRefresh: true,
+            onUpdate: (s) => { if (bar) bar.style.transform = "scaleX(" + s.progress + ")"; }
+          }
+        });
+        return () => tween.kill();
+      });
+      mm.add("(max-width: 899px)", () => { section.classList.add("hs-native"); });
+    });
+
+    if (!mm) return;
+
+    // Hero: a cím lassan elúszik, a gömb torzul
+    const heroTitle = document.querySelector(".hero-title");
+    if (heroTitle) {
+      gsap.to(heroTitle, { yPercent: 28, opacity: 0.15, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero-gl", { scale: 1.25, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+    }
+
+    // Egymásra csúszó lépéskártyák
+    const cards = gsap.utils.toArray(".stack-card");
+    cards.forEach((card, i) => {
+      if (i === cards.length - 1) return;
+      gsap.to(card, {
+        scale: 0.92 + i * 0.02, filter: "brightness(.88)", ease: "none",
+        scrollTrigger: { trigger: cards[i + 1], start: "top bottom", end: "top " + (100 + (i + 1) * 28) + "px", scrub: true }
+      });
+    });
+
+    // Parallax
+    gsap.utils.toArray("[data-speed]").forEach((el) => {
+      const s = parseFloat(el.dataset.speed) || 0;
+      gsap.fromTo(el, { yPercent: s * 20 }, { yPercent: -s * 20, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
+    });
+
+    // Telefon a tagi felület-kártyán
+    const phone = document.querySelector(".phone");
+    if (phone) {
+      gsap.fromTo(phone, { rotate: 8, y: 80 }, { rotate: -4, y: -40, ease: "none", scrollTrigger: { trigger: ".teaser", start: "top bottom", end: "bottom top", scrub: true } });
+    }
+
+    // Belső oldalak hero gömbje
+    gsap.utils.toArray(".ph-orb").forEach((el) => {
+      gsap.to(el, { yPercent: 25, scale: 1.15, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top top", end: "bottom top", scrub: true } });
+    });
+
+    window.addEventListener("load", () => ScrollTrigger.refresh());
+    if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
+  }
+
+  /* ================= Megjelenési animációk ================= */
+  let io = null;
+  const proxyOf = new WeakMap();
+  function observeAll() {
+    const sel = ".reveal, .reveal-clip, [data-split]:not([data-split-manual]), [data-inview], .footer-word";
+    const els = document.querySelectorAll(sel);
     if (!("IntersectionObserver" in window) || reduceMotion) { els.forEach((e) => e.classList.add("in")); return; }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-    els.forEach((e) => io.observe(e));
-  }
-  window.VK_REVEAL = initReveal;
-
-  function initCardGlow() {
-    document.addEventListener("pointermove", (e) => {
-      const card = e.target.closest && e.target.closest(".card");
-      if (!card) return;
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", e.clientX - r.left + "px");
-      card.style.setProperty("--my", e.clientY - r.top + "px");
-    }, { passive: true });
+    if (!io) {
+      io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          (proxyOf.get(e.target) || [e.target]).forEach((el) => el.classList.add("in"));
+          io.unobserve(e.target);
+        });
+      }, { rootMargin: "0px 0px -10% 0px", threshold: 0.05 });
+    }
+    els.forEach((e) => {
+      if (e.classList.contains("in")) return;
+      // A clip-path-tal teljesen elrejtett elemet a Chrome nem látja metszőnek → a szülőt figyeljük
+      if (e.classList.contains("reveal-clip") && e.parentElement) {
+        const list = proxyOf.get(e.parentElement) || [];
+        list.push(e);
+        proxyOf.set(e.parentElement, list);
+        io.observe(e.parentElement);
+      } else io.observe(e);
+    });
   }
 
   function initCounters() {
     const els = document.querySelectorAll("[data-count]");
     const fmt = () => new Intl.NumberFormat(lang === "hu" ? "hu-HU" : "en-GB");
+    const final = (el) => fmt().format(Number(el.dataset.count)) + (el.dataset.suffix || "");
     function run(el) {
-      const target = Number(el.dataset.count), suffix = el.dataset.suffix || "";
-      if (reduceMotion) { el.textContent = fmt().format(target) + suffix; return; }
-      const dur = 1800, s = performance.now();
+      if (reduceMotion) { el.textContent = final(el); return; }
+      const target = Number(el.dataset.count), dur = 2200, s = performance.now();
       (function step(now) {
-        const p = Math.min((now - s) / dur, 1), e = 1 - Math.pow(1 - p, 4);
-        el.textContent = fmt().format(Math.round(target * e)) + suffix;
+        const p = Math.min((now - s) / dur, 1), e = 1 - Math.pow(1 - p, 5);
+        el.textContent = fmt().format(Math.round(target * e)) + (el.dataset.suffix || "");
         if (p < 1) requestAnimationFrame(step);
       })(s);
     }
     els.forEach((el) => { el.textContent = "0"; });
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { run(e.target); io.unobserve(e.target); } });
-    });
-    els.forEach((el) => io.observe(el));
-    document.addEventListener("langchange", () => els.forEach((el) => { el.textContent = fmt().format(Number(el.dataset.count)) + (el.dataset.suffix || ""); }));
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { run(e.target); cio.unobserve(e.target); } });
+    }, { threshold: 0.4 });
+    els.forEach((el) => cio.observe(el));
+    document.addEventListener("langchange", () => els.forEach((el) => { if (el.textContent !== "0") el.textContent = final(el); }));
   }
 
-  /* ---------- Hírek ---------- */
-  const ART = [
-    ["#7b5cff", "#c8ff2e"], ["#ff6a3d", "#7b5cff"], ["#0b0a1a", "#5ce1ff"], ["#c8ff2e", "#ff6a3d"], ["#5ce1ff", "#7b5cff"], ["#15132e", "#ff6a3d"]
-  ];
+  /* ================= Kurzor, mágnes, dőlés ================= */
+  function initCursor() {
+    if (!finePointer || reduceMotion) return;
+    const ring = document.createElement("div");
+    ring.className = "cursor";
+    ring.innerHTML = "<i></i><b></b>";
+    const dot = document.createElement("div");
+    dot.className = "cursor-dot";
+    document.body.append(ring, dot);
+    const label = ring.querySelector("b");
+    let mx = -100, my = -100, rx = -100, ry = -100, shown = false;
+    addEventListener("pointermove", (e) => {
+      mx = e.clientX; my = e.clientY;
+      if (!shown) { shown = true; rx = mx; ry = my; document.documentElement.classList.add("has-cursor"); }
+      const target = e.target.closest ? e.target : null;
+      const lab = target && target.closest("[data-cursor]");
+      const link = target && target.closest("a, button, summary, label, [role=tab], select");
+      const field = target && target.closest("input, textarea, select");
+      ring.classList.toggle("is-label", !!lab);
+      ring.classList.toggle("is-link", !lab && !!link);
+      ring.classList.toggle("is-hidden", !!field);
+      dot.classList.toggle("is-hidden", !!field);
+      if (lab) label.textContent = t(lab.dataset.cursor);
+    }, { passive: true });
+    addEventListener("pointerdown", () => ring.classList.add("is-down"));
+    addEventListener("pointerup", () => ring.classList.remove("is-down"));
+    document.addEventListener("pointerleave", () => { ring.style.opacity = "0"; dot.style.opacity = "0"; });
+    document.addEventListener("pointerenter", () => { ring.style.opacity = ""; dot.style.opacity = ""; });
+    (function tick() {
+      rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+      dot.style.transform = "translate3d(" + mx + "px," + my + "px,0)";
+      requestAnimationFrame(tick);
+    })();
+  }
+
+  function initMagnetic() {
+    if (!finePointer || reduceMotion) return;
+    document.addEventListener("pointermove", (e) => {
+      document.querySelectorAll("[data-magnetic].is-mag").forEach((el) => {
+        if (el.contains(e.target)) return;
+        el.classList.remove("is-mag");
+        el.style.transition = "transform .8s cubic-bezier(.16,1,.3,1)";
+        el.style.transform = "";
+      });
+      const el = e.target.closest && e.target.closest("[data-magnetic]");
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2);
+      const k = Number(el.dataset.magnetic) || 0.3;
+      el.classList.add("is-mag");
+      el.style.transition = "transform .25s cubic-bezier(.16,1,.3,1)";
+      el.style.transform = "translate3d(" + x * k + "px," + y * k + "px,0)";
+    }, { passive: true });
+  }
+
+  function initCardFx() {
+    if (!finePointer || reduceMotion) return;
+    document.addEventListener("pointermove", (e) => {
+      const card = e.target.closest && e.target.closest(".card");
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const px = e.clientX - r.left, py = e.clientY - r.top;
+      card.style.setProperty("--mx", px + "px");
+      card.style.setProperty("--my", py + "px");
+      if (card.hasAttribute("data-tilt")) {
+        const rx = (py / r.height - 0.5) * -8, ry = (px / r.width - 0.5) * 8;
+        card.style.transform = "rotateX(" + rx + "deg) rotateY(" + ry + "deg) translateZ(0)";
+      }
+    }, { passive: true });
+    document.querySelectorAll("[data-tilt]").forEach((c) => c.addEventListener("pointerleave", () => { c.style.transform = ""; }));
+  }
+
+  /* ================= Betöltő + oldalváltás ================= */
+  const curtain = document.createElement("div");
+  curtain.className = "curtain";
+  curtain.setAttribute("aria-hidden", "true");
+
+  function whenReady(fn) {
+    if (document.documentElement.dataset.ready) fn();
+    else document.addEventListener("vk:ready", fn, { once: true });
+  }
+  function fireReady() {
+    document.documentElement.dataset.ready = "1";
+    document.dispatchEvent(new Event("vk:ready"));
+  }
+
+  function runLoader() {
+    const loader = document.createElement("div");
+    loader.className = "loader";
+    loader.setAttribute("role", "status");
+    loader.innerHTML =
+      '<div class="loader-ring"><svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="48"/><circle class="bar" cx="50" cy="50" r="48" pathLength="1"/></svg>' +
+      '<span class="loader-num">0</span></div><div class="loader-label">' + t("loader.label") + "</div>";
+    document.body.appendChild(loader);
+    const num = loader.querySelector(".loader-num"), bar = loader.querySelector(".bar");
+    let loaded = false;
+    const assets = Promise.all([
+      new Promise((r) => (document.readyState === "complete" ? r() : addEventListener("load", r, { once: true }))),
+      document.fonts ? document.fonts.ready : Promise.resolve()
+    ]);
+    assets.then(() => (loaded = true));
+    setTimeout(() => (loaded = true), 3500);
+    let p = 0, prog = 0, last = performance.now();
+    const s = last;
+    (function step(now) {
+      // Időalapú haladás: ~1,4 mp alatt 100%, de betöltés előtt 86%-nál megáll
+      prog = Math.min(1, prog + (now - last) / 1400);
+      last = now;
+      const eased = 1 - Math.pow(1 - prog, 3);
+      p = loaded ? eased : Math.min(eased, 0.86);
+      if (now - s > 5000) p = 1;
+      num.textContent = Math.round(p * 100);
+      bar.style.strokeDashoffset = String(1 - p);
+      if (p < 1) { requestAnimationFrame(step); return; }
+      setTimeout(() => {
+        loader.classList.add("is-done");
+        setTimeout(fireReady, 350);
+        setTimeout(() => loader.remove(), 1400);
+      }, 200);
+    })(s);
+  }
+
+  function initTransitions() {
+    document.body.appendChild(curtain);
+    const fromNav = ss.get("vk-curtain") === "1";
+    ss.del("vk-curtain");
+    const firstVisit = !ss.get("vk-seen");
+    ss.set("vk-seen", "1");
+
+    if (fromNav && !reduceMotion) {
+      curtain.classList.add("is-in", "no-anim");
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        curtain.classList.remove("no-anim");
+        curtain.classList.add("is-out");
+        setTimeout(fireReady, 250);
+        setTimeout(() => { curtain.classList.add("no-anim"); curtain.classList.remove("is-in", "is-out"); }, 1100);
+      }));
+    } else if (page === "home" && firstVisit && !reduceMotion) {
+      runLoader();
+    } else {
+      requestAnimationFrame(fireReady);
+    }
+
+    if (reduceMotion) return;
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest("a[href]");
+      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (a.target && a.target !== "_self") return;
+      if (a.hasAttribute("download")) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin || !/(\.html|\/)$/.test(url.pathname)) return;
+      if (url.pathname === location.pathname && url.hash) return;
+      e.preventDefault();
+      curtain.style.setProperty("--cx", e.clientX + "px");
+      curtain.style.setProperty("--cy", e.clientY + "px");
+      curtain.classList.remove("no-anim", "is-out");
+      curtain.classList.add("is-in");
+      ss.set("vk-curtain", "1");
+      setTimeout(() => { location.href = url.href; }, 780);
+    });
+    addEventListener("pageshow", (e) => {
+      if (e.persisted) { curtain.classList.add("no-anim"); curtain.classList.remove("is-in", "is-out"); ss.del("vk-curtain"); }
+    });
+  }
+
+  /* ================= Hírek ================= */
+  const ART = [["#7b5cff", "#c8ff2e"], ["#ff6a3d", "#7b5cff"], ["#0b0a1a", "#5ce1ff"], ["#c8ff2e", "#ff6a3d"], ["#5ce1ff", "#7b5cff"], ["#15132e", "#ff6a3d"]];
   function newsArt(i) {
     const [a, b] = ART[i % ART.length];
     const shapes = [
-      '<circle cx="70%" cy="55%" r="38%" fill="' + b + '"/><circle cx="28%" cy="30%" r="14%" fill="#f4f1ea" opacity=".9"/>',
-      '<rect x="-10%" y="55%" width="120%" height="60%" rx="40" fill="' + b + '" transform="rotate(-8)"/><circle cx="75%" cy="28%" r="12%" fill="#f4f1ea"/>',
-      '<circle cx="50%" cy="50%" r="34%" fill="none" stroke="' + b + '" stroke-width="22"/><circle cx="50%" cy="50%" r="12%" fill="' + b + '"/>',
-      '<path d="M0 100 Q 30 20 60 60 T 120 30 V 120 H 0Z" fill="' + b + '" transform="scale(4)"/>'
+      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#f4f1ea" opacity=".92"/>',
+      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#f4f1ea"/>',
+      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#f4f1ea" stroke-width="3" transform="rotate(-20 200 150)"/>',
+      '<path d="M0 300 C 80 60 180 60 240 180 S 360 280 400 120 V 300 Z" fill="' + b + '"/>'
     ];
-    return '<svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="100%" height="100%" fill="' + a + '"/>' + shapes[i % shapes.length] + "</svg>";
+    return '<svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="300" fill="' + a + '"/>' + shapes[i % shapes.length] + "</svg>";
   }
   function formatDate(iso) {
     return new Intl.DateTimeFormat(lang === "hu" ? "hu-HU" : "en-GB", { year: "numeric", month: "long", day: "numeric" }).format(new Date(iso));
   }
-  window.VK_FORMAT_DATE = formatDate;
-
   let newsCache = null;
   function loadNews() {
     if (newsCache) return Promise.resolve(newsCache);
     return fetch("data/news.json", { cache: "no-cache" }).then((r) => r.json()).then((d) => (newsCache = d.items.sort((a, b) => b.date.localeCompare(a.date))));
   }
-
+  function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
   function newsCardHTML(item, i, lead) {
-    return '<article class="news-card reveal' + (lead ? " news-card--lead" : "") + '" style="--d:' + (i * 0.08) + 's">' +
-      '<a href="#" data-news="' + item.id + '" class="news-thumb">' + newsArt(item.art != null ? item.art : i) + '<span class="tag">' + t("news.cat." + item.category) + "</span></a>" +
+    return '<article class="news-card reveal' + (lead ? " news-card--lead" : "") + '" style="--d:' + (i % 3) * 0.1 + 's">' +
+      '<a href="#" data-news="' + esc(item.id) + '" class="news-thumb" data-cursor="cursor.read" tabindex="-1" aria-hidden="true">' + newsArt(item.art != null ? item.art : i) + '<span class="tag">' + t("news.cat." + item.category) + "</span></a>" +
       '<div class="news-meta">' + formatDate(item.date) + "</div>" +
-      '<h3><a href="#" data-news="' + item.id + '">' + tr(item.title) + "</a></h3>" +
-      "<p>" + tr(item.excerpt) + "</p></article>";
+      '<h3><a href="#" data-news="' + esc(item.id) + '">' + esc(tr(item.title)) + "</a></h3>" +
+      "<p>" + esc(tr(item.excerpt)) + "</p></article>";
   }
-
+  let lastFocus = null;
   function openNews(item) {
     let modal = document.querySelector(".modal");
     if (!modal) {
@@ -381,35 +692,39 @@
       modal.className = "modal";
       modal.setAttribute("role", "dialog");
       modal.setAttribute("aria-modal", "true");
-      modal.innerHTML = '<div class="modal-panel"><button class="modal-close" type="button">' + icon("close", ' width="20" height="20"') + '</button><div class="modal-body"></div></div>';
+      modal.innerHTML = '<div class="modal-panel" data-lenis-prevent><button class="modal-close" type="button">' + icon("close", ' width="20" height="20"') + '</button><div class="modal-body"></div></div>';
       document.body.appendChild(modal);
-      const close = () => { modal.classList.remove("is-open"); document.body.style.overflow = ""; };
+      const close = () => {
+        if (!modal.classList.contains("is-open")) return;
+        modal.classList.remove("is-open");
+        document.body.style.overflow = "";
+        if (lenis) lenis.start();
+        if (lastFocus) lastFocus.focus();
+      };
       modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".modal-close")) close(); });
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
     }
+    lastFocus = document.activeElement;
     modal.querySelector(".modal-close").setAttribute("aria-label", t("nav.close"));
     modal.querySelector(".modal-body").innerHTML =
-      '<div><span class="tag" style="background:var(--ink);color:var(--volt)">' + t("news.cat." + item.category) + '</span></div>' +
+      '<div><span class="tag" style="background:var(--ink);color:var(--volt)">' + t("news.cat." + item.category) + "</span></div>" +
       '<div class="news-meta">' + formatDate(item.date) + "</div>" +
-      '<h2 class="h-m">' + tr(item.title) + "</h2>" +
-      tr(item.body).split("\n\n").map((p) => "<p>" + p + "</p>").join("");
+      '<h2 class="h-m">' + esc(tr(item.title)) + "</h2>" +
+      tr(item.body).split("\n\n").map((p) => "<p>" + esc(p) + "</p>").join("");
     modal.setAttribute("aria-label", tr(item.title));
     requestAnimationFrame(() => modal.classList.add("is-open"));
     document.body.style.overflow = "hidden";
+    if (lenis) lenis.stop();
     modal.querySelector(".modal-close").focus();
   }
-
   function initNews() {
     const home = document.querySelector("[data-news-latest]");
     const list = document.querySelector("[data-news-list]");
     if (!home && !list) return;
     let filter = "all";
-
     function render() {
       loadNews().then((items) => {
-        if (home) {
-          home.innerHTML = items.slice(0, 3).map((it, i) => newsCardHTML(it, i, i === 0)).join("");
-        }
+        if (home) home.innerHTML = items.slice(0, 3).map((it, i) => newsCardHTML(it, i, i === 0)).join("");
         if (list) {
           const chips = document.querySelector("[data-news-chips]");
           const cats = ["all"].concat([...new Set(items.map((i) => i.category))]);
@@ -417,17 +732,16 @@
           const shown = items.filter((i) => filter === "all" || i.category === filter);
           list.innerHTML = shown.length ? shown.map((it, i) => newsCardHTML(it, i, false)).join("") : '<p class="empty">' + t("news.empty") + "</p>";
         }
-        initReveal();
+        observeAll();
+        if (hasGSAP) ScrollTrigger.refresh();
       }).catch(() => {
-        const target = home || list;
-        target.innerHTML = '<p class="empty">Hírek betöltése sikertelen. Futtasd az oldalt webszerverről (lásd README).</p>';
+        (home || list).innerHTML = '<p class="empty">Hírek betöltése sikertelen.</p>';
       });
     }
-
     document.addEventListener("click", (e) => {
-      const chip = e.target.closest("[data-cat]");
+      const chip = e.target.closest && e.target.closest("[data-cat]");
       if (chip) { filter = chip.dataset.cat; render(); return; }
-      const link = e.target.closest("[data-news]");
+      const link = e.target.closest && e.target.closest("[data-news]");
       if (link) {
         e.preventDefault();
         loadNews().then((items) => { const it = items.find((x) => x.id === link.dataset.news); if (it) openNews(it); });
@@ -437,7 +751,7 @@
     render();
   }
 
-  /* ---------- Űrlapok (demó) ---------- */
+  /* ================= Űrlapok (demó) ================= */
   function initForms() {
     document.querySelectorAll("form[data-demo-form]").forEach((form) => {
       form.addEventListener("submit", (e) => {
@@ -447,39 +761,57 @@
         box.hidden = false;
         box.className = "alert alert--ok";
         box.textContent = t(form.dataset.okKey);
-        form.querySelectorAll("input:not([type=checkbox]), textarea").forEach((i) => (i.value = ""));
+        form.reset();
       });
     });
   }
 
-  /* ---------- PWA: service worker + telepítés ---------- */
+  /* ================= PWA ================= */
   function initPWA() {
-    if ("serviceWorker" in navigator && location.protocol !== "file:") {
-      navigator.serviceWorker.register("sw.js").catch(() => {});
-    }
+    if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(() => {});
     let deferred = null;
-    window.addEventListener("beforeinstallprompt", (e) => {
+    addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferred = e;
       document.querySelectorAll(".install-link").forEach((b) => (b.hidden = false));
     });
     document.addEventListener("click", (e) => {
-      if (e.target.closest(".install-link") && deferred) { deferred.prompt(); deferred = null; }
+      if (e.target.closest && e.target.closest(".install-link") && deferred) { deferred.prompt(); deferred = null; }
     });
   }
 
-  /* ---------- Indítás ---------- */
+  /* ================= Indítás ================= */
   document.documentElement.classList.remove("no-js");
+  const grain = document.createElement("div");
+  grain.className = "grain";
+  grain.setAttribute("aria-hidden", "true");
+  document.body.appendChild(grain);
+
   renderHeader();
   renderFooter();
   setLang(lang);
-  document.querySelectorAll("canvas[data-orb]").forEach((c) => Orb(c, { rings: c.dataset.orb !== "plain", count: Number(c.dataset.count) || 1100 }));
-  initReveal();
-  initCardGlow();
+  initSmoothScroll();
+  initOrbs();
+  initGSAPScenes();
+  observeAll();
   initCounters();
+  initCursor();
+  initMagnetic();
+  initCardFx();
+  initMarquees();
   initNews();
   initForms();
   initPWA();
+  initTransitions();
 
-  window.VK = { t, tr, setLang, getLang: () => lang, icon };
+  // Hero intro a betöltés / oldalváltás után
+  whenReady(() => {
+    document.querySelectorAll("[data-split-manual], .hero-intro").forEach((el) => el.classList.add("in"));
+  });
+
+  if (hasGSAP) gsap.ticker.add(scrollTick);
+  else (function loop() { scrollTick(); requestAnimationFrame(loop); })();
+
+  window.VK = { t, tr, setLang, getLang: () => lang, icon, formatDate, observeAll };
+  window.VK_FORMAT_DATE = formatDate;
 })();

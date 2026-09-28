@@ -1,8 +1,11 @@
 /* Service worker: offline váz + friss adatok (network-first a /data alatt). */
-const CACHE = "vk-v1";
+const CACHE = "vk-v2";
 const SHELL = [
   "./", "index.html", "about.html", "services.html", "news.html", "join.html", "contact.html", "login.html", "portal.html", "privacy.html",
-  "assets/css/style.css", "assets/js/i18n.js", "assets/js/app.js", "assets/js/portal.js", "assets/img/icon.svg", "manifest.webmanifest"
+  "assets/css/style.css?v=2", "assets/css/fonts.css?v=2", "assets/js/i18n.js?v=2", "assets/js/app.js?v=2", "assets/js/orb-gl.js?v=2", "assets/js/portal.js?v=2",
+  "assets/vendor/gsap.min.js", "assets/vendor/ScrollTrigger.min.js", "assets/vendor/lenis.min.js",
+  "assets/fonts/Unbounded-normal-latin.woff2", "assets/fonts/Manrope-normal-latin.woff2",
+  "assets/img/icon.svg", "manifest.webmanifest"
 ];
 
 self.addEventListener("install", (e) => {

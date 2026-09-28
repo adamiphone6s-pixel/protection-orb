@@ -4,86 +4,113 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Védőkör Szakszervezet</title>
-  <meta name="description" content="Munkavállalói érdekképviselet több vállalatnál — jogsegély, bértárgyalás, támogatás.">
+  <meta name="description" content="Munkavállalói érdekképviselet több vállalatnál — jogsegély, bértárgyalás, szociális támogatás és vállalatonkénti tagi felület.">
   <meta name="theme-color" content="#0b0a1a">
+  <link rel="canonical" href="https://protection-orb.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Védőkör Szakszervezet">
+  <meta property="og:title" content="Védőkör Szakszervezet — Együtt erősebbek vagyunk">
+  <meta property="og:description" content="Munkavállalói érdekképviselet több vállalatnál — jogsegély, bértárgyalás, szociális támogatás és vállalatonkénti tagi felület.">
+  <meta property="og:url" content="https://protection-orb.vercel.app/">
+  <meta property="og:image" content="https://protection-orb.vercel.app/assets/img/og.png">
+  <meta property="og:locale" content="hu_HU">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/icon-192.png">
-  <meta property="og:title" content="Védőkör Szakszervezet — Együtt erősebbek vagyunk">
-  <meta property="og:description" content="Munkavállalói érdekképviselet több vállalatnál.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preload" href="assets/fonts/Unbounded-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Manrope-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=2">
+  <link rel="stylesheet" href="assets/css/style.css?v=2">
 </head>
 <body data-page="home">
 <main id="main">
 
   <!-- HERO -->
-  <section class="hero dark">
-    <div class="hero-orb" aria-hidden="true"><canvas data-orb></canvas></div>
-    <div class="container hero-grid">
-      <span class="eyebrow fade-up" data-i18n="hero.eyebrow"></span>
-      <h1 class="h-xl hero-title">
-        <span class="line"><span data-i18n="hero.title.1"></span></span>
-        <span class="line"><span data-i18n="hero.title.2"></span></span>
-        <span class="line"><span data-i18n="hero.title.3"></span></span>
-      </h1>
-      <div class="hero-bottom">
-        <div style="display:grid;gap:28px">
-          <p class="lead fade-up d2" data-i18n="hero.lead"></p>
-          <div class="hero-ctas fade-up d3">
-            <a class="btn btn--volt" href="join.html"><span data-i18n="hero.cta.join"></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-            <a class="btn btn--ghost" href="login.html" data-i18n="hero.cta.members"></a>
-          </div>
-        </div>
-        <span class="scroll-hint fade-up d3"><i></i><span data-i18n="hero.scroll"></span></span>
+  <section class="hero dark hero-intro">
+    <div class="hero-gl" aria-hidden="true"><canvas data-gl-orb></canvas></div>
+    <div class="container hero-inner">
+      <div class="hero-top">
+        <span class="eyebrow" data-i18n="hero.eyebrow"></span>
+        <span data-i18n="hero.loc"></span>
       </div>
-      <div class="stats fade-up d3">
-        <div class="stat"><b data-count="12400"></b><span data-i18n="stats.members"></span></div>
-        <div class="stat"><b data-count="38"></b><span data-i18n="stats.companies"></span></div>
-        <div class="stat"><b data-count="35"></b><span data-i18n="stats.years"></span></div>
-        <div class="stat"><b data-count="920" data-suffix="+"></b><span data-i18n="stats.cases"></span></div>
+      <h1 class="hero-title" data-split="chars" data-split-manual data-i18n-html="hero.title"></h1>
+      <div class="hero-foot">
+        <p class="lead" data-i18n="hero.lead"></p>
+        <div class="hero-ctas">
+          <a class="btn btn--volt" href="join.html" data-magnetic><span class="roll"><span data-i18n="hero.cta.join"></span></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn--ghost" href="login.html" data-magnetic><span class="roll"><span data-i18n="hero.cta.members"></span></span></a>
+        </div>
+        <a class="hero-badge" href="join.html" data-magnetic="0.25" data-i18n-attr="aria-label:hero.cta.join">
+          <svg class="ring" viewBox="0 0 132 132" aria-hidden="true"><defs><path id="circ" d="M66 66 m-54 0 a54 54 0 1 1 108 0 a54 54 0 1 1 -108 0"/></defs><text><textPath href="#circ" data-i18n="hero.badge"></textPath></text></svg>
+          <span class="core"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- MARQUEE -->
-  <div class="marquee-wrap"><div class="marquee" aria-hidden="true">
-    <div class="marquee-track"><span data-i18n="marquee"></span><span data-i18n="marquee"></span><span data-i18n="marquee"></span><span data-i18n="marquee"></span></div>
-  </div></div>
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee"><div class="marquee-track" data-dir="-1"><span data-i18n="marquee"></span><span data-i18n="marquee"></span><span data-i18n="marquee"></span><span data-i18n="marquee"></span></div></div>
+  </div>
 
-  <!-- WHY -->
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <div class="container">
+      <span class="eyebrow reveal" data-i18n="manifesto.eyebrow"></span>
+      <p class="manifesto-text" data-manifesto data-i18n="manifesto.text"></p>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <section class="section dark">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow reveal" data-i18n="numbers.eyebrow"></span>
+        <h2 class="h-l" data-split data-i18n-html="numbers.title"></h2>
+      </div>
+      <div class="numbers">
+        <div class="num reveal"><b data-count="12400"></b><span data-i18n="stats.members"></span></div>
+        <div class="num reveal" style="--d:.1s"><b data-count="38"></b><span data-i18n="stats.companies"></span></div>
+        <div class="num reveal" style="--d:.2s"><b data-count="35"></b><span data-i18n="stats.years"></span></div>
+        <div class="num reveal" style="--d:.3s"><b data-count="920" data-suffix="+"></b><span data-i18n="stats.cases"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY / BENTO -->
   <section class="section">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow" data-i18n="why.eyebrow"></span>
-        <h2 class="h-l" data-i18n-html="why.title"></h2>
-        <p class="lead muted" data-i18n="why.lead"></p>
+      <div class="section-head">
+        <span class="eyebrow reveal" data-i18n="why.eyebrow"></span>
+        <h2 class="h-l" data-split data-i18n-html="why.title"></h2>
+        <p class="lead muted reveal" data-i18n="why.lead"></p>
       </div>
       <div class="bento">
-        <article class="card card--span-7 card--ink card--feature reveal">
-          <span class="big-num">01</span>
+        <article class="card card--span-7 card--ink card--feature reveal" data-tilt>
+          <span class="card-orb" aria-hidden="true"></span>
+          <span class="big-num" aria-hidden="true">01</span>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 21h14M4 8h16M7 8l-3 7a3 3 0 0 0 6 0L7 8Zm10 0-3 7a3 3 0 0 0 6 0l-3-7Z"/></svg></div>
           <h3 class="h-m" data-i18n="why.1.t"></h3>
           <p data-i18n="why.1.d"></p>
         </article>
-        <article class="card card--span-5 card--volt reveal" style="--d:.08s">
+        <article class="card card--span-5 card--volt reveal" style="--d:.1s" data-tilt>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
           <h3 class="h-s" data-i18n="why.2.t"></h3>
           <p data-i18n="why.2.d"></p>
         </article>
-        <article class="card card--span-4 reveal">
+        <article class="card card--span-4 reveal" data-tilt>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></div>
           <h3 class="h-s" data-i18n="why.3.t"></h3>
           <p data-i18n="why.3.d"></p>
         </article>
-        <article class="card card--span-4 reveal" style="--d:.08s">
+        <article class="card card--span-4 reveal" style="--d:.1s" data-tilt>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
           <h3 class="h-s" data-i18n="why.4.t"></h3>
           <p data-i18n="why.4.d"></p>
         </article>
-        <article class="card card--span-4 card--violet reveal" style="--d:.16s">
+        <article class="card card--span-4 card--violet reveal" style="--d:.2s" data-tilt>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.6L20 11l-5.8 2.4L12 19l-2.2-5.6L4 11l5.8-2.4L12 3Z"/></svg></div>
           <h3 class="h-s" data-i18n="why.5.t"></h3>
           <p data-i18n="why.5.d"></p>
@@ -92,37 +119,91 @@
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section class="section dark">
-    <div class="container">
-      <div class="section-head section-head--row reveal">
-        <div style="display:grid;gap:20px">
-          <span class="eyebrow" data-i18n="svc.eyebrow"></span>
-          <h2 class="h-l" data-i18n="svc.title"></h2>
-        </div>
-        <a class="link-arrow" href="services.html"><span data-i18n="svc.more"></span> →</a>
+  <!-- SERVICES: horizontal -->
+  <section class="hs dark" data-hs aria-labelledby="svc-title">
+    <div class="container hs-head">
+      <div style="display:grid;gap:20px">
+        <span class="eyebrow" data-i18n="svc.eyebrow"></span>
+        <h2 class="h-l" id="svc-title" data-split data-i18n="svc.title"></h2>
       </div>
-      <div class="svc-list">
-        <a class="svc reveal" href="services.html"><h3 data-i18n="svc.1.t"></h3><p data-i18n="svc.1.d"></p><span class="svc-arrow">↗</span></a>
-        <a class="svc reveal" href="services.html"><h3 data-i18n="svc.2.t"></h3><p data-i18n="svc.2.d"></p><span class="svc-arrow">↗</span></a>
-        <a class="svc reveal" href="services.html"><h3 data-i18n="svc.3.t"></h3><p data-i18n="svc.3.d"></p><span class="svc-arrow">↗</span></a>
-        <a class="svc reveal" href="services.html"><h3 data-i18n="svc.4.t"></h3><p data-i18n="svc.4.d"></p><span class="svc-arrow">↗</span></a>
-        <a class="svc reveal" href="services.html"><h3 data-i18n="svc.5.t"></h3><p data-i18n="svc.5.d"></p><span class="svc-arrow">↗</span></a>
+      <a class="link-arrow" href="services.html"><span data-i18n="svc.more"></span> →</a>
+    </div>
+    <div class="hs-viewport">
+      <div class="hs-track">
+        <a class="hs-card" href="services.html" data-cursor="cursor.open">
+          <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".5"/><circle cx="50" cy="50" r="26" fill="#c8ff2e"/></svg>
+          <span class="n">01 / 06</span>
+          <h3 data-i18n="svc.1.t"></h3>
+          <p data-i18n="svc.1.d"></p>
+          <span class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="hs-card" href="services.html" data-cursor="cursor.open">
+          <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 6 L94 84 H6Z" fill="none" stroke="#c8ff2e" stroke-width="1.5"/><circle cx="50" cy="60" r="16" fill="#7b5cff"/></svg>
+          <span class="n">02 / 06</span>
+          <h3 data-i18n="svc.2.t"></h3>
+          <p data-i18n="svc.2.d"></p>
+          <span class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="hs-card" href="services.html" data-cursor="cursor.open">
+          <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><rect x="14" y="14" width="72" height="72" rx="36" fill="#0b0a1a"/><rect x="34" y="34" width="32" height="32" rx="8" fill="#c8ff2e" transform="rotate(45 50 50)"/></svg>
+          <span class="n">03 / 06</span>
+          <h3 data-i18n="svc.3.t"></h3>
+          <p data-i18n="svc.3.d"></p>
+          <span class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="hs-card" href="services.html" data-cursor="cursor.open">
+          <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><circle cx="36" cy="50" r="30" fill="#0b0a1a"/><circle cx="64" cy="50" r="30" fill="none" stroke="#0b0a1a" stroke-width="2"/></svg>
+          <span class="n">04 / 06</span>
+          <h3 data-i18n="svc.4.t"></h3>
+          <p data-i18n="svc.4.d"></p>
+          <span class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="hs-card" href="services.html" data-cursor="cursor.open">
+          <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 70 Q 30 10 50 50 T 90 30" fill="none" stroke="#7b5cff" stroke-width="8" stroke-linecap="round"/><circle cx="80" cy="76" r="12" fill="#ff6a3d"/></svg>
+          <span class="n">05 / 06</span>
+          <h3 data-i18n="svc.5.t"></h3>
+          <p data-i18n="svc.5.d"></p>
+          <span class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="hs-card" href="services.html" data-cursor="cursor.open">
+          <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="36" fill="#0b0a1a"/><ellipse cx="50" cy="50" rx="48" ry="14" fill="none" stroke="#f4f1ea" stroke-width="2" transform="rotate(-24 50 50)"/></svg>
+          <span class="n">06 / 06</span>
+          <h3 data-i18n="svc.6.t"></h3>
+          <p data-i18n="svc.6.d"></p>
+          <span class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <div class="hs-end"><a class="hero-badge" href="services.html" data-magnetic="0.25" data-i18n-attr="aria-label:svc.more" style="justify-self:center">
+          <svg class="ring" viewBox="0 0 132 132" aria-hidden="true"><defs><path id="circ2" d="M66 66 m-54 0 a54 54 0 1 1 108 0 a54 54 0 1 1 -108 0"/></defs><text><textPath href="#circ2" data-i18n="hero.badge"></textPath></text></svg>
+          <span class="core"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a></div>
       </div>
     </div>
+    <div class="container"><div class="hs-progress" aria-hidden="true"><i></i></div></div>
   </section>
 
-  <!-- STEPS -->
+  <!-- STEPS: stacking -->
   <section class="section">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow" data-i18n="steps.eyebrow"></span>
-        <h2 class="h-l" data-i18n-html="steps.title"></h2>
+      <div class="section-head">
+        <span class="eyebrow reveal" data-i18n="steps.eyebrow"></span>
+        <h2 class="h-l" data-split data-i18n-html="steps.title"></h2>
       </div>
-      <div class="steps">
-        <div class="step reveal"><h3 class="h-s" data-i18n="steps.1.t"></h3><p data-i18n="steps.1.d"></p></div>
-        <div class="step reveal" style="--d:.1s"><h3 class="h-s" data-i18n="steps.2.t"></h3><p data-i18n="steps.2.d"></p></div>
-        <div class="step reveal" style="--d:.2s"><h3 class="h-s" data-i18n="steps.3.t"></h3><p data-i18n="steps.3.d"></p></div>
+      <div class="stack">
+        <article class="stack-card" style="--i:0">
+          <span class="num-big">1</span>
+          <div><h3 data-i18n="steps.1.t"></h3><p data-i18n="steps.1.d"></p></div>
+          <svg class="stack-ico" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 8"/><circle cx="50" cy="50" r="18" fill="#7b5cff"/></svg>
+        </article>
+        <article class="stack-card" style="--i:1">
+          <span class="num-big">2</span>
+          <div><h3 data-i18n="steps.2.t"></h3><p data-i18n="steps.2.d"></p></div>
+          <svg class="stack-ico" viewBox="0 0 100 100" aria-hidden="true"><circle cx="36" cy="50" r="28" fill="none" stroke="#c8ff2e" stroke-width="2"/><circle cx="64" cy="50" r="28" fill="none" stroke="#c8ff2e" stroke-width="2"/></svg>
+        </article>
+        <article class="stack-card" style="--i:2">
+          <span class="num-big">3</span>
+          <div><h3 data-i18n="steps.3.t"></h3><p data-i18n="steps.3.d"></p></div>
+          <svg class="stack-ico" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="30" fill="#c8ff2e"/><ellipse cx="50" cy="50" rx="48" ry="16" fill="none" stroke="#fff" stroke-width="2" transform="rotate(-24 50 50)"/></svg>
+        </article>
       </div>
     </div>
   </section>
@@ -130,30 +211,35 @@
   <!-- PORTAL TEASER -->
   <section class="section--tight">
     <div class="container">
-      <div class="teaser reveal">
+      <div class="teaser reveal-clip">
         <div>
           <span class="eyebrow" data-i18n="portal.teaser.eyebrow"></span>
-          <h2 class="h-l" style="margin-top:20px" data-i18n-html="portal.teaser.title"></h2>
-          <p class="lead muted" style="margin-top:20px" data-i18n="portal.teaser.lead"></p>
+          <h2 class="h-l" style="margin-top:24px" data-split data-i18n-html="portal.teaser.title"></h2>
+          <p class="lead muted" style="margin-top:24px" data-i18n="portal.teaser.lead"></p>
           <ul class="checklist">
             <li data-i18n="portal.teaser.l1"></li>
             <li data-i18n="portal.teaser.l2"></li>
             <li data-i18n="portal.teaser.l3"></li>
           </ul>
-          <a class="btn btn--volt" href="login.html"><span data-i18n="portal.teaser.cta"></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn--volt" href="login.html" data-magnetic><span class="roll"><span data-i18n="portal.teaser.cta"></span></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
-        <div class="phone" aria-hidden="true">
-          <div class="phone-screen">
-            <div class="ps-top"><span style="font-weight:800">Minta Pharma</span><span class="ps-avatar"></span></div>
-            <div class="ps-title">Szia, Anna 👋</div>
-            <div class="ps-card volt"><div style="font-weight:700;opacity:.7">Béremelés 2026</div><div class="ps-big">+9,5%</div></div>
-            <div class="ps-row">
-              <div class="ps-card ink"><div style="opacity:.7">Bizalmik</div><div class="ps-big" style="font-size:22px">6</div></div>
-              <div class="ps-card"><div style="opacity:.7">Dokumentum</div><div class="ps-big" style="font-size:22px">14</div></div>
+        <div class="phone-wrap" aria-hidden="true">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="ps-top"><span style="font-weight:800">Minta Pharma</span><span class="ps-avatar"></span></div>
+              <div class="ps-title">Szia, Anna 👋</div>
+              <div class="ps-card volt"><div style="font-weight:700;opacity:.7">Béremelés 2026</div><div class="ps-big">+9,5%</div></div>
+              <div class="ps-row">
+                <div class="ps-card ink"><div style="opacity:.7">Bizalmik</div><div class="ps-big" style="font-size:22px">6</div></div>
+                <div class="ps-card"><div style="opacity:.7">Dokumentum</div><div class="ps-big" style="font-size:22px">14</div></div>
+              </div>
+              <div class="ps-card"><div style="font-weight:700;margin-bottom:8px">Kollektív szerződés</div><div class="ps-bar" style="width:90%"></div><div class="ps-bar" style="width:70%;margin-top:6px"></div></div>
+              <div class="ps-card"><div style="font-weight:700;margin-bottom:8px">Családi nap · okt. 12.</div><div class="ps-bar" style="width:60%"></div></div>
             </div>
-            <div class="ps-card"><div style="font-weight:700;margin-bottom:8px">Kollektív szerződés</div><div class="ps-bar" style="width:90%"></div><div class="ps-bar" style="width:70%;margin-top:6px"></div></div>
-            <div class="ps-card"><div style="font-weight:700;margin-bottom:8px">Családi nap · okt. 12.</div><div class="ps-bar" style="width:60%"></div></div>
           </div>
+          <div class="float-chip c1" data-speed="1.2"><i></i>+9,5% béremelés</div>
+          <div class="float-chip c2" data-speed="-0.8"><i></i>Új dokumentum</div>
+          <div class="float-chip c3" data-speed="0.6"><i></i>Taggyűlés · okt. 28.</div>
         </div>
       </div>
     </div>
@@ -162,23 +248,28 @@
   <!-- NEWS -->
   <section class="section">
     <div class="container">
-      <div class="section-head section-head--row reveal">
+      <div class="section-head section-head--row">
         <div style="display:grid;gap:20px">
-          <span class="eyebrow" data-i18n="news.eyebrow"></span>
-          <h2 class="h-l" data-i18n="news.title"></h2>
+          <span class="eyebrow reveal" data-i18n="news.eyebrow"></span>
+          <h2 class="h-l" data-split data-i18n="news.title"></h2>
         </div>
-        <a class="link-arrow" href="news.html"><span data-i18n="news.all"></span> →</a>
+        <a class="link-arrow reveal" href="news.html"><span data-i18n="news.all"></span> →</a>
       </div>
       <div class="news-grid" data-news-latest></div>
     </div>
   </section>
 
+  <!-- MARQUEE 2 -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee"><div class="marquee-track" data-dir="1"><span data-i18n="marquee"></span><span data-i18n="marquee"></span><span data-i18n="marquee"></span><span data-i18n="marquee"></span></div></div>
+  </div>
+
   <!-- FAQ -->
-  <section class="section" style="padding-top:0">
+  <section class="section">
     <div class="container faq-wrap">
-      <div class="reveal" style="display:grid;gap:20px;align-content:start">
-        <span class="eyebrow" data-i18n="faq.eyebrow"></span>
-        <h2 class="h-l" data-i18n="faq.title"></h2>
+      <div style="display:grid;gap:20px;align-content:start">
+        <span class="eyebrow reveal" data-i18n="faq.eyebrow"></span>
+        <h2 class="h-l" data-split data-i18n="faq.title"></h2>
       </div>
       <div class="faq reveal">
         <details open><summary><span data-i18n="faq.1.q"></span><span class="plus"></span></summary><p class="answer" data-i18n="faq.1.a"></p></details>
@@ -190,18 +281,24 @@
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="section dark cta">
-    <div class="cta-orb" aria-hidden="true"><canvas data-orb="plain" data-count="700"></canvas></div>
-    <div class="container reveal">
-      <h2 class="h-xl" data-i18n-html="cta.title"></h2>
-      <p class="lead" data-i18n="cta.lead"></p>
-      <a class="btn btn--volt" href="join.html"><span data-i18n="cta.btn"></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  <section class="cta dark">
+    <div class="cta-orb" aria-hidden="true"><canvas data-orb data-count="800"></canvas></div>
+    <div class="container">
+      <h2 class="h-xl" data-split data-i18n-html="cta.title"></h2>
+      <p class="lead reveal" data-i18n="cta.lead"></p>
+      <a class="btn btn--volt reveal" href="join.html" data-magnetic><span class="roll"><span data-i18n="cta.btn"></span></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </section>
 
 </main>
-<script src="assets/js/i18n.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/js/i18n.js?v=2" defer></script>
+<script src="assets/js/orb-gl.js?v=2" defer></script>
+<script src="assets/js/app.js?v=2" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Védőkör Szakszervezet","url":"https://protection-orb.vercel.app/","logo":"https://protection-orb.vercel.app/assets/img/icon-512.png","email":"info@vedokor.hu","telephone":"+36 1 000 0000","address":{"@type":"PostalAddress","streetAddress":"Minta utca 1.","postalCode":"1000","addressLocality":"Budapest","addressCountry":"HU"}}
+</script>
 </body>
 </html>

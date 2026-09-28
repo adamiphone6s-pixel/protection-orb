@@ -24,6 +24,14 @@ Build nem kell, a `vercel.json` már be van állítva.
 2. Framework Preset: **Other**, minden más maradhat alapértelmezett → **Deploy**.
 3. Ezután minden `git push` automatikusan frissíti az oldalt (a nem-main ágak előnézeti linket kapnak).
 
+## Élmény és technika
+
+- **WebGL „védőgömb”** (`assets/js/orb-gl.js`): raymarcholt, zajjal torzított gömb, egérre és görgetésre reagál; WebGL nélkül 2D részecske-gömb a tartalék.
+- **Mozgás:** első látogatáskor betöltő animáció, körbe nyíló oldalváltás, sima görgetés (Lenis), szavanként/betűnként beúszó címek, görgetésre kivilágosodó kiáltvány, vízszintesen görgetett szolgáltatás-kártyák, egymásra csúszó lépések, sebességfüggő szalag, mágneses gombok, egyedi kurzor (GSAP + ScrollTrigger).
+- **Hozzáférhetőség:** „csökkentett mozgás” beállításnál minden animáció kikapcsol; billentyűzettel teljesen bejárható; képernyőolvasók a teljes címszöveget kapják.
+- **Teljesítmény / adatvédelem:** betűtípusok és könyvtárak helyben kiszolgálva (nincs Google Fonts / CDN kérés), a WebGL csak látható állapotban renderel.
+- **SEO:** oldalankénti meta leírás, Open Graph kép, `sitemap.xml`, `robots.txt`, szervezeti strukturált adat, egyedi 404 oldal.
+
 ## Szerkezet
 
 | Útvonal | Tartalom |
@@ -35,6 +43,8 @@ Build nem kell, a `vercel.json` már be van állítva.
 | `assets/js/i18n.js` | Minden felületi szöveg magyarul és angolul |
 | `assets/js/app.js` | Fejléc/lábléc, nyelvváltás, animációk, hírek, PWA |
 | `assets/js/portal.js` | Belépés és tagi felület |
+| `assets/js/orb-gl.js` | WebGL gömb shader |
+| `assets/vendor/`, `assets/fonts/` | GSAP, ScrollTrigger, Lenis; önállóan kiszolgált betűtípusok |
 | `data/news.json` | Nyilvános hírek (kétnyelvű) |
 | `data/companies/*.json` | Vállalatonkénti tagi tartalom (havi frissítés) |
 | `data/members.json` | **Csak demó** tagkódok |
