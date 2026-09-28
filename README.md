@@ -16,6 +16,14 @@ Majd: <http://localhost:3000> (ill. 8080).
 
 **Demó tagi belépés** (`login.html`): `PH-1001`, `EN-2001` vagy `CH-3001`, jelszó: `demo1234` — mindegyik más vállalat adatait mutatja.
 
+## Közzététel (Vercel)
+
+Build nem kell, a `vercel.json` már be van állítva.
+
+1. <https://vercel.com/new> → **Import Git Repository** → `protection-orb`.
+2. Framework Preset: **Other**, minden más maradhat alapértelmezett → **Deploy**.
+3. Ezután minden `git push` automatikusan frissíti az oldalt (a nem-main ágak előnézeti linket kapnak).
+
 ## Szerkezet
 
 | Útvonal | Tartalom |
