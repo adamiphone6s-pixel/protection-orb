@@ -55,7 +55,7 @@ float map(vec3 p){
 }
 
 vec3 calcNormal(vec3 p){
-  vec2 e=vec2(.006,0.);
+  vec2 e=vec2(.012,0.);
   return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));
 }
 
@@ -64,11 +64,11 @@ void main(){
   vec3 ro=vec3(0.,0.,4.3);
   vec3 rd=normalize(vec3(uv,-1.75));
 
-  vec3 lime=vec3(.784,1.,.18);
-  vec3 violet=vec3(.482,.361,1.);
-  vec3 coral=vec3(1.,.416,.239);
-  vec3 sky=vec3(.361,.882,1.);
-  vec3 ink=vec3(.043,.039,.102);
+  // Paletta: obszidián test, csontfehér stúdiófény, vermilion peremfény
+  vec3 accent=vec3(1.,.29,.11);
+  vec3 ember=vec3(.42,.08,.02);
+  vec3 bone=vec3(.95,.93,.9);
+  vec3 graphite=vec3(.055,.055,.062);
 
   // Befoglaló gömb — a sugarak nagy része gyorsan kilép
   float b=dot(ro,rd);float c=dot(ro,ro)-1.55*1.55;float h=b*b-c;
@@ -94,28 +94,31 @@ void main(){
       vec3 n=calcNormal(p);
       float fres=pow(1.-max(dot(n,-rd),0.),2.4);
       float band=snoise(n*1.6+vec3(uTime*.1))*.5+.5;
-      vec3 col=mix(violet,sky,smoothstep(-.1,1.,n.x+band*.3)*.55);
-      col=mix(col,coral,smoothstep(.25,1.,-n.y+band*.25)*.75);
-      col=mix(col,lime,smoothstep(.75,1.1,n.y+band*.2)*.6);
       vec3 l=normalize(vec3(-.5,.8,.6));
       float dif=max(dot(n,l),0.);
-      float spec=pow(max(dot(reflect(-l,n),-rd),0.),48.);
-      col*=.22+.9*dif;
-      col=mix(col,ink,.35*(1.-dif));
-      col+=fres*lime*1.15;
-      col+=spec*.95;
-      // finom irizáló csíkok
-      col+=.035*sin(vec3(0.,2.,4.)+dot(n,rd)*14.+uTime);
+      float spec=pow(max(dot(reflect(-l,n),-rd),0.),64.);
+      vec3 rf=reflect(rd,n);
+      // stúdió-softbox tükröződés felül + finom zajos csíkok
+      float env=smoothstep(.15,.95,rf.y)*(.55+.45*band);
+      float strip=smoothstep(.72,.98,sin(rf.x*3.2+band*2.+uTime*.15)*.5+.5)*smoothstep(-.2,.6,rf.y);
+      vec3 col=graphite*(.6+.8*dif);
+      col+=bone*env*.5;
+      col+=bone*strip*.32;
+      // alsó, meleg visszaverődés
+      col+=ember*smoothstep(.35,1.,-n.y+band*.15)*.55;
+      // vermilion perem
+      col+=accent*pow(fres,2.2)*1.25;
+      col+=bone*spec*.9;
       outc=vec4(col,1.);
     } else {
       // lágy, élsimított perem a lépcsőzés ellen
       float edge=1.-smoothstep(0.,.03,minD);
-      outc=vec4(mix(violet,lime,.55)*.9,edge*.85);
+      outc=vec4(accent*.85,edge*.8);
     }
   }
   // külső fényudvar
   float halo=glow*.55*(1.-outc.a)*(1.-smoothstep(.3,.5,length(uv)));
-  vec3 hcol=mix(violet,lime,.12)*halo*1.1;
+  vec3 hcol=accent*halo*.75;
   float a=clamp(outc.a+halo,0.,1.);
   vec3 col=outc.rgb*outc.a+hcol;
   gl_FragColor=vec4(col,a);

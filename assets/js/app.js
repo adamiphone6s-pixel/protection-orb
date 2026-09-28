@@ -88,9 +88,9 @@
 
   const LOGO_MARK =
     '<svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">' +
-    '<defs><radialGradient id="lg" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#c8ff2e"/><stop offset=".55" stop-color="#7b5cff"/><stop offset="1" stop-color="#2a1f7a"/></radialGradient></defs>' +
-    '<circle cx="20" cy="20" r="14" fill="url(#lg)"/>' +
-    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-24 20 20)" opacity=".9"/></svg>';
+    '<defs><radialGradient id="lg" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#8d8a85"/><stop offset=".45" stop-color="#26262a"/><stop offset="1" stop-color="#0c0c0e"/></radialGradient></defs>' +
+    '<circle cx="20" cy="20" r="14" fill="url(#lg)" stroke="currentColor" stroke-opacity=".18"/>' +
+    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="#ff4a1c" stroke-width="1.8" transform="rotate(-24 20 20)"/></svg>';
 
   /* ================= Layout ================= */
   const NAV = [
@@ -299,8 +299,8 @@
         const x1 = x * cY - z * sY, z1 = x * sY + z * cY, y1 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
         const persp = 2.4 / (2.4 - z2), depth = (z2 + 1) / 2, mix = (y1 + 1) / 2;
         let r, g, b;
-        if (mix < 0.5) { const k = mix / 0.5; r = 200 - 77 * k; g = 255 - 163 * k; b = 46 + 209 * k; }
-        else { const k = (mix - 0.5) / 0.5; r = 123 + 132 * k; g = 92 + 14 * k; b = 255 - 194 * k; }
+        if (mix < 0.5) { const k = mix / 0.5; r = 242 - 90 * k; g = 239 - 92 * k; b = 233 - 95 * k; }
+        else { const k = (mix - 0.5) / 0.5; r = 152 + 103 * k; g = 147 - 73 * k; b = 138 - 110 * k; }
         ctx.fillStyle = "rgba(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + "," + (0.1 + depth * 0.9).toFixed(3) + ")";
         ctx.beginPath(); ctx.arc(cx + x1 * R * persp, cy + y1 * R * persp, 0.5 + depth * 1.8, 0, 6.2832); ctx.fill();
       }
@@ -415,7 +415,7 @@
     cards.forEach((card, i) => {
       if (i === cards.length - 1) return;
       gsap.to(card, {
-        scale: 0.92 + i * 0.02, filter: "brightness(.88)", ease: "none",
+        scale: 0.92 + i * 0.02, ease: "none",
         scrollTrigger: { trigger: cards[i + 1], start: "top bottom", end: "top " + (100 + (i + 1) * 28) + "px", scrub: true }
       });
     });
@@ -657,13 +657,13 @@
   }
 
   /* ================= Hírek ================= */
-  const ART = [["#7b5cff", "#c8ff2e"], ["#ff6a3d", "#7b5cff"], ["#0b0a1a", "#5ce1ff"], ["#c8ff2e", "#ff6a3d"], ["#5ce1ff", "#7b5cff"], ["#15132e", "#ff6a3d"]];
+  const ART = [["#0c0c0e", "#ff4a1c"], ["#e2ded5", "#0c0c0e"], ["#ff4a1c", "#0c0c0e"], ["#232327", "#c9c4b9"], ["#c9c4b9", "#ff4a1c"], ["#161619", "#efece6"]];
   function newsArt(i) {
     const [a, b] = ART[i % ART.length];
     const shapes = [
-      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#f4f1ea" opacity=".92"/>',
-      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#f4f1ea"/>',
-      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#f4f1ea" stroke-width="3" transform="rotate(-20 200 150)"/>',
+      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#efece6" opacity=".92"/>',
+      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#efece6"/>',
+      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#efece6" stroke-width="3" transform="rotate(-20 200 150)"/>',
       '<path d="M0 300 C 80 60 180 60 240 180 S 360 280 400 120 V 300 Z" fill="' + b + '"/>'
     ];
     return '<svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="300" fill="' + a + '"/>' + shapes[i % shapes.length] + "</svg>";
@@ -707,7 +707,7 @@
     lastFocus = document.activeElement;
     modal.querySelector(".modal-close").setAttribute("aria-label", t("nav.close"));
     modal.querySelector(".modal-body").innerHTML =
-      '<div><span class="tag" style="background:var(--ink);color:var(--volt)">' + t("news.cat." + item.category) + "</span></div>" +
+      '<div><span class="tag" style="background:var(--ink);color:var(--accent)">' + t("news.cat." + item.category) + "</span></div>" +
       '<div class="news-meta">' + formatDate(item.date) + "</div>" +
       '<h2 class="h-m">' + esc(tr(item.title)) + "</h2>" +
       tr(item.body).split("\n\n").map((p) => "<p>" + esc(p) + "</p>").join("");
