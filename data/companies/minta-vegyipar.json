@@ -1,0 +1,42 @@
+{
+  "_info": "Vállalati tagi tartalom — havonta frissítendő. A kétnyelvű mezők { hu, en } formátumúak.",
+  "id": "minta-vegyipar",
+  "name": "Minta Vegyipari Nyrt.",
+  "short": "MV",
+  "accent": "#ff6a3d",
+  "updated": "2026-09-18",
+  "memberCount": 1530,
+  "highlight": {
+    "title": { "hu": "Bértárgyalás: 2. forduló október 8-án", "en": "Pay talks: round 2 on 8 October" },
+    "text": { "hu": "Követelésünk 11% alapbéremelés és a vegyi pótlék emelése. Tarts velünk a tájékoztató fórumon!", "en": "We are asking for an 11% base pay rise and a higher chemical-hazard allowance. Join us at the briefing!" }
+  },
+  "wages": {
+    "increase": "11%",
+    "note": { "hu": "Szakszervezeti követelés — a tárgyalás folyamatban", "en": "Union demand — negotiations ongoing" },
+    "bands": [
+      { "label": { "hu": "Vegyipari operátor", "en": "Chemical operator" }, "value": "11%", "pct": 100 },
+      { "label": { "hu": "Karbantartó", "en": "Maintenance" }, "value": "11%", "pct": 100 },
+      { "label": { "hu": "Minőségellenőr", "en": "Quality inspector" }, "value": "10%", "pct": 91 }
+    ],
+    "benefits": [
+      { "label": { "hu": "Vegyi pótlék", "en": "Chemical-hazard allowance" }, "value": { "hu": "15% → 20% (követelés)", "en": "15% → 20% (demand)" } },
+      { "label": { "hu": "Cafeteria keret / év", "en": "Benefits budget / year" }, "value": "380 000 Ft" }
+    ]
+  },
+  "news": [
+    { "date": "2026-09-18", "title": { "hu": "Átadtuk a bérkövetelést", "en": "Pay demand submitted" }, "text": { "hu": "A tagi kérdőív alapján összeállított követelést a vezérigazgatónak adtuk át.", "en": "The demand, built from the member survey, was handed to the CEO." } },
+    { "date": "2026-08-25", "title": { "hu": "Kérdőív eredmények", "en": "Survey results" }, "text": { "hu": "A tagok 87%-a kitöltötte — köszönjük!", "en": "87% of members responded — thank you!" } }
+  ],
+  "documents": [
+    { "type": "PDF", "title": { "hu": "Bérkövetelés 2027", "en": "Pay demand 2027" }, "meta": { "hu": "Átadva: 2026. szept. 18.", "en": "Submitted: 18 Sep 2026" }, "url": "#" },
+    { "type": "PDF", "title": { "hu": "Kollektív szerződés", "en": "Collective agreement" }, "meta": { "hu": "Hatályos: 2023. júl. 1.", "en": "In force: 1 Jul 2023" }, "url": "#" }
+  ],
+  "contacts": [
+    { "name": "Molnár Zsófia", "role": { "hu": "Alapszervezeti titkár", "en": "Branch secretary" }, "phone": "+36 30 000 0021", "email": "molnar.zsofia@vedokor.hu" },
+    { "name": "Balogh Ádám", "role": { "hu": "Munkavédelmi képviselő", "en": "Safety rep" }, "phone": "+36 30 000 0022", "email": "balogh.adam@vedokor.hu" }
+  ],
+  "events": [
+    { "date": "2026-10-06", "title": { "hu": "Tájékoztató fórum a bértárgyalásról", "en": "Pay talks briefing" }, "text": { "hu": "14:30 · Kultúrház", "en": "2:30pm · Community hall" } },
+    { "date": "2026-10-08", "title": { "hu": "Bértárgyalás — 2. forduló", "en": "Pay talks — round 2" }, "text": { "hu": "Eredményről azonnal értesítünk.", "en": "We'll update you immediately." } }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "_info": "CSAK DEMÓ! Éles rendszerben a tagi hitelesítés szerveroldalon történik, ez a fájl ott nem létezik. hash = SHA-256('TAGKÓD:jelszó').",
+  "members": [
+    { "code": "PH-1001", "name": "Anna", "company": "minta-pharma", "hash": "497adb32345ff4a059f3d1db6dbe9cf584c4bb9dcf6794eceeb260b9b26cc38e" },
+    { "code": "EN-2001", "name": "Bence", "company": "minta-energia", "hash": "aca9f0ae4355798f1c0af19966525bad45903d41e37db4294668bbdce951e587" },
+    { "code": "CH-3001", "name": "Csilla", "company": "minta-vegyipar", "hash": "29dc9dbd0a5f7e0c99f0db1fdea5327365ed6a2927b666197965211ddd2a0200" }
+  ]
+}

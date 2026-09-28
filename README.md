@@ -1,0 +1,45 @@
+# Védőkör Szakszervezet — weboldal
+
+Kétnyelvű (HU/EN), mobilra optimalizált, telepíthető (PWA) szakszervezeti weboldal nyilvános résszel és vállalatonként szétválasztott **tagi felülettel**.
+
+> A „Védőkör” munkanév és a minta vállalatok/nevek helyőrzők — a végleges nevet, logót, színeket és tartalmat a megrendelő adja.
+
+## Futtatás helyben
+
+A tartalom JSON-ból töltődik, ezért webszerver kell (dupla kattintással `file://`-ként nem megy):
+
+```bash
+npx serve .          # vagy: python3 -m http.server 8080
+```
+
+Majd: <http://localhost:3000> (ill. 8080).
+
+**Demó tagi belépés** (`login.html`): `PH-1001`, `EN-2001` vagy `CH-3001`, jelszó: `demo1234` — mindegyik más vállalat adatait mutatja.
+
+## Szerkezet
+
+| Útvonal | Tartalom |
+|---|---|
+| `index.html` | Kezdőlap (hero, előnyök, szolgáltatások, csatlakozás, hírek, GYIK) |
+| `about.html`, `services.html`, `news.html`, `join.html`, `contact.html`, `privacy.html` | Nyilvános aloldalak |
+| `login.html`, `portal.html` | Tagi belépés és vállalati tagi felület |
+| `assets/css/style.css` | Teljes design-rendszer; a márkaszínek/betűk a `:root` tokenekben |
+| `assets/js/i18n.js` | Minden felületi szöveg magyarul és angolul |
+| `assets/js/app.js` | Fejléc/lábléc, nyelvváltás, animációk, hírek, PWA |
+| `assets/js/portal.js` | Belépés és tagi felület |
+| `data/news.json` | Nyilvános hírek (kétnyelvű) |
+| `data/companies/*.json` | Vállalatonkénti tagi tartalom (havi frissítés) |
+| `data/members.json` | **Csak demó** tagkódok |
+| `manifest.webmanifest`, `sw.js` | Telepíthető „app” + offline működés |
+
+## Havi frissítés
+
+- **Hír:** új elem a `data/news.json`-ba (`hu` / `en` mezőkkel).
+- **Vállalati infó:** a `data/companies/<vállalat>.json` szerkesztése, `updated` dátum átírása.
+- **Új vállalat:** új JSON a `data/companies/` alá (egy meglévő másolata), és a hozzá tartozó tagok.
+
+Élesben ezt egy admin felület (CMS) váltja ki — lásd [docs/PROJEKT.md](docs/PROJEKT.md).
+
+## ⚠️ Biztonság
+
+A jelenlegi tagi belépés **kliensoldali demó**: a vállalati JSON-ok és a tagkód-lista nyilvánosan letölthetők. Éles indulás előtt szerveroldali hitelesítés kell — a terv a `docs/PROJEKT.md`-ben.

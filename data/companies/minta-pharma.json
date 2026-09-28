@@ -1,0 +1,50 @@
+{
+  "_info": "Vállalati tagi tartalom — havonta frissítendő. A kétnyelvű mezők { hu, en } formátumúak.",
+  "id": "minta-pharma",
+  "name": "Minta Pharma Zrt.",
+  "short": "MP",
+  "accent": "#c8ff2e",
+  "updated": "2026-09-25",
+  "memberCount": 2140,
+  "highlight": {
+    "title": { "hu": "Aláírtuk a 2026-os bérmegállapodást", "en": "2026 wage agreement signed" },
+    "text": { "hu": "Átlagosan 9,5%-os alapbéremelés október 1-jétől, visszamenőleg szeptemberre is. A műszakpótlék 5 százalékponttal nő.", "en": "An average 9.5% base pay rise from 1 October, backdated to September. Shift allowance increases by 5 percentage points." }
+  },
+  "wages": {
+    "increase": "+9,5%",
+    "note": { "hu": "Átlagos alapbéremelés, 2026. október 1-jétől", "en": "Average base pay rise from 1 October 2026" },
+    "bands": [
+      { "label": { "hu": "Operátor I–II.", "en": "Operator I–II" }, "value": "+11,0%", "pct": 100 },
+      { "label": { "hu": "Technikus", "en": "Technician" }, "value": "+9,5%", "pct": 86 },
+      { "label": { "hu": "Laboráns", "en": "Lab assistant" }, "value": "+9,0%", "pct": 82 },
+      { "label": { "hu": "Adminisztráció", "en": "Administration" }, "value": "+8,0%", "pct": 73 }
+    ],
+    "benefits": [
+      { "label": { "hu": "Cafeteria keret / év", "en": "Benefits budget / year" }, "value": "450 000 Ft" },
+      { "label": { "hu": "Műszakpótlék (délután / éjszaka)", "en": "Shift allowance (afternoon / night)" }, "value": "35% / 55%" },
+      { "label": { "hu": "13. havi prémium", "en": "13th-month bonus" }, "value": { "hu": "Igen, célfüggő", "en": "Yes, target-based" } },
+      { "label": { "hu": "Iskolakezdési támogatás", "en": "School-start support" }, "value": "40 000 Ft" }
+    ]
+  },
+  "news": [
+    { "date": "2026-09-25", "title": { "hu": "Bérmegállapodás: részletek és GYIK", "en": "Wage agreement: details and FAQ" }, "text": { "hu": "Összefoglaltuk, mikor és hogyan jelenik meg az emelés a bérpapíron.", "en": "When and how the rise appears on your payslip." } },
+    { "date": "2026-09-12", "title": { "hu": "Új munkavédelmi képviselő a C üzemben", "en": "New safety rep in Plant C" }, "text": { "hu": "Kovács Dóra látja el a feladatot a C üzem mindhárom műszakjában.", "en": "Dóra Kovács now covers all three shifts in Plant C." } },
+    { "date": "2026-08-30", "title": { "hu": "Parkolási rend változás — egyeztettünk", "en": "Parking rule change — we negotiated" }, "text": { "hu": "A műszakos dolgozók továbbra is ingyen parkolhatnak a keleti parkolóban.", "en": "Shift workers can continue parking for free in the east car park." } }
+  ],
+  "documents": [
+    { "type": "PDF", "title": { "hu": "Kollektív szerződés 2025–2027", "en": "Collective agreement 2025–2027" }, "meta": { "hu": "Hatályos: 2025. jan. 1.", "en": "In force: 1 Jan 2025" }, "url": "#" },
+    { "type": "PDF", "title": { "hu": "Bérmegállapodás 2026", "en": "Wage agreement 2026" }, "meta": { "hu": "Aláírva: 2026. szept. 22.", "en": "Signed: 22 Sep 2026" }, "url": "#" },
+    { "type": "PDF", "title": { "hu": "Segélyigénylő lap", "en": "Grant application form" }, "meta": { "hu": "Kitölthető űrlap", "en": "Fillable form" }, "url": "#" },
+    { "type": "DOC", "title": { "hu": "Munkaidő-beosztás szabályai", "en": "Rota rules" }, "meta": { "hu": "Frissítve: 2026. aug.", "en": "Updated: Aug 2026" }, "url": "#" }
+  ],
+  "contacts": [
+    { "name": "Szabó Márton", "role": { "hu": "Alapszervezeti titkár", "en": "Branch secretary" }, "phone": "+36 30 000 0001", "email": "szabo.marton@vedokor.hu" },
+    { "name": "Kovács Dóra", "role": { "hu": "Munkavédelmi képviselő — C üzem", "en": "Safety rep — Plant C" }, "phone": "+36 30 000 0002", "email": "kovacs.dora@vedokor.hu" },
+    { "name": "Tóth Levente", "role": { "hu": "Bizalmi — Logisztika", "en": "Shop steward — Logistics" }, "phone": "+36 30 000 0003", "email": "toth.levente@vedokor.hu" }
+  ],
+  "events": [
+    { "date": "2026-10-12", "title": { "hu": "Családi nap a gyár parkjában", "en": "Family day in the factory park" }, "text": { "hu": "10:00–18:00 · Regisztráció a bizalmiknál", "en": "10am–6pm · Register with your shop stewards" } },
+    { "date": "2026-10-28", "title": { "hu": "Taggyűlés — bérmegállapodás értékelése", "en": "Members' meeting — wage agreement review" }, "text": { "hu": "15:00 · Nagy tárgyaló, B épület", "en": "3pm · Main meeting room, Building B" } },
+    { "date": "2026-11-15", "title": { "hu": "Munkajogi fogadóóra", "en": "Employment-law clinic" }, "text": { "hu": "Dr. Nagy Eszter jogász · előzetes bejelentkezéssel", "en": "Dr Eszter Nagy, lawyer · by appointment" } }
+  ]
+}

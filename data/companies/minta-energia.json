@@ -1,0 +1,43 @@
+{
+  "_info": "Vállalati tagi tartalom — havonta frissítendő. A kétnyelvű mezők { hu, en } formátumúak.",
+  "id": "minta-energia",
+  "name": "Minta Energia Kft.",
+  "short": "ME",
+  "accent": "#5ce1ff",
+  "updated": "2026-09-20",
+  "memberCount": 860,
+  "highlight": {
+    "title": { "hu": "Új ügyeleti pótlékrendszer januártól", "en": "New on-call allowance scheme from January" },
+    "text": { "hu": "A készenléti díj óránként 20%-kal nő, és a hétvégi ügyelet külön szorzót kap.", "en": "The on-call rate rises by 20% per hour, and weekend on-call gets its own multiplier." }
+  },
+  "wages": {
+    "increase": "+8,2%",
+    "note": { "hu": "Átlagos alapbéremelés, 2026. január 1-jétől", "en": "Average base pay rise from 1 January 2026" },
+    "bands": [
+      { "label": { "hu": "Hálózati szerelő", "en": "Network fitter" }, "value": "+9,0%", "pct": 100 },
+      { "label": { "hu": "Diszpécser", "en": "Dispatcher" }, "value": "+8,5%", "pct": 94 },
+      { "label": { "hu": "Mérnök", "en": "Engineer" }, "value": "+7,5%", "pct": 83 },
+      { "label": { "hu": "Ügyfélszolgálat", "en": "Customer service" }, "value": "+8,0%", "pct": 89 }
+    ],
+    "benefits": [
+      { "label": { "hu": "Cafeteria keret / év", "en": "Benefits budget / year" }, "value": "400 000 Ft" },
+      { "label": { "hu": "Készenléti díj", "en": "On-call rate" }, "value": { "hu": "+20% / óra", "en": "+20% / hour" } },
+      { "label": { "hu": "Energiakedvezmény", "en": "Energy discount" }, "value": "15%" }
+    ]
+  },
+  "news": [
+    { "date": "2026-09-20", "title": { "hu": "Ügyeleti rendszer: tárgyalási jegyzőkönyv", "en": "On-call scheme: negotiation minutes" }, "text": { "hu": "Letölthető a Dokumentumok fül alatt.", "en": "Available under the Documents tab." } },
+    { "date": "2026-09-03", "title": { "hu": "Téli védőruházat igénylése", "en": "Winter protective clothing requests" }, "text": { "hu": "Október 10-ig jelezd a méretedet a bizalminak.", "en": "Tell your shop steward your size by 10 October." } }
+  ],
+  "documents": [
+    { "type": "PDF", "title": { "hu": "Kollektív szerződés 2024–2026", "en": "Collective agreement 2024–2026" }, "meta": { "hu": "Hatályos: 2024. márc. 1.", "en": "In force: 1 Mar 2024" }, "url": "#" },
+    { "type": "PDF", "title": { "hu": "Ügyeleti megállapodás — tervezet", "en": "On-call agreement — draft" }, "meta": { "hu": "Véleményezés: okt. 15-ig", "en": "Comments by 15 Oct" }, "url": "#" }
+  ],
+  "contacts": [
+    { "name": "Varga Péter", "role": { "hu": "Alapszervezeti titkár", "en": "Branch secretary" }, "phone": "+36 30 000 0011", "email": "varga.peter@vedokor.hu" },
+    { "name": "Horváth Lilla", "role": { "hu": "Bizalmi — Ügyfélszolgálat", "en": "Shop steward — Customer service" }, "phone": "+36 30 000 0012", "email": "horvath.lilla@vedokor.hu" }
+  ],
+  "events": [
+    { "date": "2026-10-20", "title": { "hu": "Fórum az új ügyeleti rendszerről", "en": "Forum on the new on-call scheme" }, "text": { "hu": "16:00 · Online (Teams)", "en": "4pm · Online (Teams)" } }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "_info": "Nyilvános hírek. Új hír: másold le egy elemet, adj új egyedi id-t, dátumot (ÉÉÉÉ-HH-NN) és kategóriát (berek | jog | kozosseg | munkavedelem). A body-ban üres sor (\\n\\n) választja el a bekezdéseket.",
+  "items": [
+    {
+      "id": "2026-09-berkorkep",
+      "date": "2026-09-22",
+      "category": "berek",
+      "art": 0,
+      "title": { "hu": "Lezárult az őszi bértárgyalási kör: átlagosan 9,5% emelés", "en": "Autumn pay round closed: 9.5% average increase" },
+      "excerpt": { "hu": "Négy partnervállalatnál írtuk alá a 2026-os bérmegállapodást — a legalacsonyabb bérsávokban kiemelt emeléssel.", "en": "We signed the 2026 wage agreement at four partner companies — with extra increases in the lowest pay bands." },
+      "body": { "hu": "Hosszú, de eredményes tárgyalássorozat zárult szeptemberben. A megállapodás értelmében az alapbérek átlagosan 9,5%-kal emelkednek, a legalacsonyabb bérsávokban ennél is nagyobb mértékben.\n\nA vállalatspecifikus részleteket a tagi felületen, a saját vállalatod oldalán találod.", "en": "A long but successful round of negotiations ended in September. Under the agreement, base salaries rise by 9.5% on average, with larger increases in the lowest bands.\n\nCompany-specific details are available in the member area, on your own company's page." }
+    },
+    {
+      "id": "2026-09-fiatalok",
+      "date": "2026-09-10",
+      "category": "kozosseg",
+      "art": 1,
+      "title": { "hu": "Indul az ifjúsági mentorprogram harmadik évfolyama", "en": "Youth mentoring programme enters its third year" },
+      "excerpt": { "hu": "Pályakezdő tagjainkat tapasztalt kollégák kísérik az első évükben — jelentkezz október 15-ig!", "en": "Experienced colleagues support early-career members through their first year — apply by 15 October!" },
+      "body": { "hu": "A mentorprogramban minden résztvevő egy tapasztalt bizalmit kap maga mellé, aki segít eligazodni a munkahelyi jogokban, a karrierlehetőségekben és a szakszervezeti munkában.\n\nJelentkezni a vállalati bizalmiknál vagy a központi e-mail címen lehet.", "en": "Every participant is paired with an experienced shop steward who helps them navigate workplace rights, career options and union work.\n\nApply through your company shop stewards or our central email address." }
+    },
+    {
+      "id": "2026-08-hoseg",
+      "date": "2026-08-18",
+      "category": "munkavedelem",
+      "art": 3,
+      "title": { "hu": "Hőségriadó: ezek a jogaid a munkahelyen", "en": "Heatwave alert: your rights at work" },
+      "excerpt": { "hu": "Védőital, pihenőidő, hűtött helyiség — összegyűjtöttük, mit kell biztosítania a munkáltatónak kánikulában.", "en": "Drinks, rest breaks, cooled rooms — here's what your employer must provide during a heatwave." },
+      "body": { "hu": "Ha a munkahelyi hőmérséklet tartósan meghaladja a jogszabályban rögzített értéket, a munkáltatónak védőitalt, rendszeres pihenőidőt és lehetőség szerint hűtött pihenőhelyiséget kell biztosítania.\n\nHa ezek hiányoznak, jelezd a munkavédelmi képviselőnek vagy a bizalminak.", "en": "If workplace temperatures persistently exceed the legal threshold, employers must provide drinks, regular rest breaks and, where possible, a cooled rest room.\n\nIf these are missing, tell your safety representative or shop steward." }
+    },
+    {
+      "id": "2026-07-jogsegely",
+      "date": "2026-07-29",
+      "category": "jog",
+      "art": 2,
+      "title": { "hu": "Megnyertük: visszajár a jogtalanul levont túlórapótlék", "en": "We won: unlawfully withheld overtime pay must be repaid" },
+      "excerpt": { "hu": "Jogászaink első fokon nyertek 42 tagunk ügyében — a munkáltatónak visszamenőleg ki kell fizetnie a pótlékot.", "en": "Our lawyers won at first instance for 42 members — the employer must pay the allowance retroactively." },
+      "body": { "hu": "A bíróság kimondta, hogy a munkáltató jogellenesen alkalmazta a munkaidőkeretet, ezért a túlórapótlék visszamenőleg jár az érintett kollégáknak.\n\nHa hasonló helyzetben vagy, keresd jogsegélyvonalunkat.", "en": "The court ruled that the employer applied the working-time framework unlawfully, so affected colleagues are owed overtime pay retroactively.\n\nIf you're in a similar situation, call our legal helpline." }
+    },
+    {
+      "id": "2026-06-csaladi-nap",
+      "date": "2026-06-14",
+      "category": "kozosseg",
+      "art": 4,
+      "title": { "hu": "Több mint 3000-en voltunk a nyári családi napon", "en": "Over 3,000 of us at the summer family day" },
+      "excerpt": { "hu": "Koncert, gyerekprogramok, sportbajnokság — köszönjük mindenkinek, aki eljött!", "en": "Concert, kids' activities, sports tournament — thank you to everyone who came!" },
+      "body": { "hu": "Idén minden eddiginél többen ünnepeltünk együtt. A fotókat hamarosan feltöltjük a tagi felületre.", "en": "More of us celebrated together this year than ever before. Photos will be uploaded to the member area soon." }
+    },
+    {
+      "id": "2026-05-cafeteria",
+      "date": "2026-05-20",
+      "category": "berek",
+      "art": 5,
+      "title": { "hu": "Cafeteria 2026: mi változott, és hogyan válassz okosan?", "en": "Benefits 2026: what changed and how to choose wisely" },
+      "excerpt": { "hu": "Rövid útmutató a béren kívüli juttatások idei szabályaihoz.", "en": "A short guide to this year's rules on fringe benefits." },
+      "body": { "hu": "Összefoglaltuk a legfontosabb változásokat, és azt, hogy melyik elem mikor éri meg a legjobban.", "en": "We've summarised the key changes and when each option pays off most." }
+    }
+  ]
+}
