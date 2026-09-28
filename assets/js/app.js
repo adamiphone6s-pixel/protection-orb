@@ -354,30 +354,6 @@
     }
   }
 
-  function initMarquees() {
-    const tracks = document.querySelectorAll(".marquee-track");
-    if (!tracks.length) return;
-    if (reduceMotion) return;
-    const state = Array.from(tracks).map((el) => ({ el, x: 0, dir: Number(el.dataset.dir || -1), w: 0 }));
-    function measure() { state.forEach((s) => { s.w = s.el.scrollWidth / 2; }); }
-    measure();
-    addEventListener("resize", measure);
-    document.addEventListener("langchange", () => requestAnimationFrame(measure));
-    let scrollDir = 1;
-    (function tick() {
-      const v = velocity;
-      if (Math.abs(v) > 0.5) scrollDir = v > 0 ? 1 : -1;
-      const speed = 1 + Math.min(Math.abs(v) * 0.35, 14);
-      state.forEach((s) => {
-        s.x += s.dir * speed * scrollDir;
-        if (s.w) { if (s.x <= -s.w) s.x += s.w; if (s.x > 0) s.x -= s.w; }
-        const skew = Math.max(-10, Math.min(10, v * 0.3));
-        s.el.style.transform = "translate3d(" + s.x + "px,0,0) skewX(" + (-skew * s.dir * -1) + "deg)";
-      });
-      requestAnimationFrame(tick);
-    })();
-  }
-
   function initGSAPScenes() {
     const mm = hasGSAP && !reduceMotion ? gsap.matchMedia() : null;
 
@@ -798,7 +774,6 @@
   initCursor();
   initMagnetic();
   initCardFx();
-  initMarquees();
   initNews();
   initForms();
   initPWA();

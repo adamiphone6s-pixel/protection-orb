@@ -341,15 +341,6 @@ a:hover .roll > span, button:hover .roll > span { transform: translateY(-50%); }
   .hero-title { text-align: left; }
 }
 
-/* ---------- Marquee (sebességfüggő) ---------- */
-.marquee-wrap { overflow: hidden; padding-block: 40px; margin-block: -40px; position: relative; z-index: 3; }
-.marquee { background: var(--accent); color: var(--ink); overflow: hidden; padding: 22px 0; transform: rotate(-2deg) scale(1.05); }
-.marquee--alt { background: var(--accent); color: #fff; transform: rotate(2deg) scale(1.05); margin-top: -64px; position: relative; z-index: -1; }
-.marquee-track { display: flex; width: max-content; will-change: transform; }
-.marquee-track span { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 3.4vw, 48px); letter-spacing: -0.04em; white-space: pre; }
-.no-marquee-js .marquee-track { animation: marquee 38s linear infinite; }
-@keyframes marquee { to { transform: translateX(-50%); } }
-
 /* ---------- Manifesto ---------- */
 .manifesto { padding-block: clamp(120px, 18vw, 260px); }
 .manifesto-text { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 4.4vw, 68px); letter-spacing: -0.04em; line-height: 1.12; max-width: 22ch; }

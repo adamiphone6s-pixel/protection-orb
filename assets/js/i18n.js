@@ -50,7 +50,6 @@ window.I18N = {
     "stats.years": "év tapasztalat",
     "stats.cases": "megnyert jogi ügy",
 
-    "marquee": "Tisztességes bér ✦ Biztonságos munkahely ✦ Jogsegély ✦ Kollektív szerződés ✦ Közösség ✦ Esélyegyenlőség ✦ ",
 
     "why.eyebrow": "Miért mi?",
     "why.title": "Egy tagság. <em>Rengeteg</em> erő mögötted.",
@@ -293,7 +292,6 @@ window.I18N = {
     "stats.years": "years of experience",
     "stats.cases": "legal cases won",
 
-    "marquee": "Fair pay ✦ Safe workplaces ✦ Legal aid ✦ Collective agreements ✦ Community ✦ Equal opportunity ✦ ",
 
     "why.eyebrow": "Why us?",
     "why.title": "One membership. <em>So much</em> strength behind you.",
