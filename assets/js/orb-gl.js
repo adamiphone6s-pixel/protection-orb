@@ -55,8 +55,10 @@ float map(vec3 p){
 }
 
 vec3 calcNormal(vec3 p){
-  vec2 e=vec2(.012,0.);
-  return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));
+  // tetraéderes normálisbecslés: 4 mintavétel 6 helyett
+  const vec2 k=vec2(1.,-1.);
+  float e=.012;
+  return normalize(k.xyy*map(p+k.xyy*e)+k.yyx*map(p+k.yyx*e)+k.yxy*map(p+k.yxy*e)+k.xxx*map(p+k.xxx*e));
 }
 
 void main(){
@@ -84,7 +86,7 @@ void main(){
       vec3 p=ro+rd*t;
       float d=map(p);
       minD=min(minD,d);
-      if(d<.0015){hit=true;break;}
+      if(d<.0025){hit=true;break;}
       t+=d;
       if(t>tmax)break;
     }
@@ -165,9 +167,11 @@ void main(){
     ["uRes", "uTime", "uMouse", "uScroll", "uHover", "uSteps"].forEach((n) => (u[n] = gl.getUniformLocation(prog, n)));
 
     const mobile = window.matchMedia("(max-width: 820px)").matches;
-    const quality = opts.quality || (mobile ? 0.55 : 0.75);
-    gl.uniform1i(u.uSteps, mobile ? 48 : 72);
-
+    // Pixelkeret: a gömb lágy, ezért a vásznat kisebb felbontáson rendereljük és a CSS nagyítja fel.
+    const baseScale = opts.quality || (mobile ? 0.6 : 0.8);
+    let scale = baseScale;
+    const MAX_PX = mobile ? 560 : 820;
+    gl.uniform1i(u.uSteps, mobile ? 40 : 56);
     let w = 0, h = 0, running = false, visible = true, raf = 0;
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
     let scroll = 0, hover = 0, hoverT = 0;
@@ -175,16 +179,26 @@ void main(){
 
     function resize() {
       const r = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2) * quality;
-      w = Math.max(1, Math.round(r.width * dpr));
-      h = Math.max(1, Math.round(r.height * dpr));
-      canvas.width = w;
-      canvas.height = h;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25) * scale;
+      const cap = Math.min(1, (MAX_PX * scale / baseScale) / Math.max(r.width * dpr, r.height * dpr, 1));
+      w = Math.max(1, Math.round(r.width * dpr * cap));
+      h = Math.max(1, Math.round(r.height * dpr * cap));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
       gl.viewport(0, 0, w, h);
       gl.uniform2f(u.uRes, w, h);
       frame(performance.now());
     }
-
+    // Adaptív minőség: lassú gépen csökkenti, gyorson visszaállítja a felbontást
+    let fCount = 0, fSum = 0, fLast = 0;
+    function adapt(now) {
+      if (fLast) { fSum += now - fLast; fCount++; }
+      fLast = now;
+      if (fCount < 40) return;
+      const avg = fSum / fCount;
+      fCount = 0; fSum = 0;
+      if (avg > 21 && scale > 0.4) { scale = Math.max(0.4, scale * 0.82); resize(); }
+      else if (avg < 14 && scale < baseScale) { scale = Math.min(baseScale, scale * 1.1); resize(); }
+    }
     function frame(now) {
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
@@ -199,6 +213,7 @@ void main(){
     }
     function loop(now) {
       if (!running) return;
+      adapt(now);
       frame(now);
       raf = requestAnimationFrame(loop);
     }
@@ -207,7 +222,7 @@ void main(){
       running = true;
       raf = requestAnimationFrame(loop);
     }
-    function stop() { running = false; cancelAnimationFrame(raf); }
+    function stop() { running = false; fLast = 0; cancelAnimationFrame(raf); }
 
     if (!reduce) {
       window.addEventListener("pointermove", (e) => {

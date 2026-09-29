@@ -58,6 +58,7 @@
     applyI18n();
     splitAll();
     initManifesto();
+    tickY = -1;
     const titleKey = document.body.dataset.titleKey;
     document.title = (titleKey ? t(titleKey).replace(/<[^>]+>/g, "") + " · " : "") + t("brand.name") + " " + t("brand.tag");
     document.querySelectorAll(".lang-toggle").forEach((b) => {
@@ -341,17 +342,19 @@
 
   /* ================= Görgetéshez kötött effektek ================= */
   let velocity = 0, lastScroll = window.scrollY;
+  // Csak akkor mérünk elrendezést, ha ténylegesen változott a görgetés
+  const heroEl = document.querySelector(".hero");
+  let heroH = heroEl ? heroEl.offsetHeight : 1, tickY = -1;
+  addEventListener("resize", () => { if (heroEl) heroH = heroEl.offsetHeight; tickY = -1; }, { passive: true });
   function scrollTick() {
     const y = window.scrollY;
     const v = lenis ? lenis.velocity : y - lastScroll;
     velocity += (v - velocity) * 0.2;
     lastScroll = y;
+    if (y === tickY) return;
+    tickY = y;
     updateManifesto();
-    const hero = document.querySelector(".hero");
-    if (hero && orbs[0]) {
-      const p = Math.min(1, Math.max(0, y / (hero.offsetHeight || 1)));
-      orbs[0].setScroll(p);
-    }
+    if (heroEl && orbs[0]) orbs[0].setScroll(Math.min(1, Math.max(0, y / (heroH || 1))));
   }
 
   function initGSAPScenes() {
