@@ -40,7 +40,7 @@ Build nem kell, a `vercel.json` már be van állítva.
 |---|---|
 | `index.html` | Kezdőlap (hero, előnyök, szolgáltatások, csatlakozás, hírek, GYIK) |
 | `about.html`, `services.html`, `news.html`, `join.html`, `contact.html`, `privacy.html` | Nyilvános aloldalak |
-| `login.html`, `portal.html` | Tagi belépés és vállalati tagi felület |
+| `login.html`, `portal.html` | Tagi belépés és vállalati tagi app (oldalsáv / mobil fülsáv, áttekintés, hírek, bérek, dokumentumok, bizalmik, események; ⌘K kereső, naptárba mentés) |
 | `assets/css/style.css` | Teljes design-rendszer; a márkaszínek/betűk a `:root` tokenekben |
 | `assets/js/i18n.js` | Minden felületi szöveg magyarul és angolul |
 | `assets/js/app.js` | Fejléc/lábléc, nyelvváltás, animációk, hírek, PWA |

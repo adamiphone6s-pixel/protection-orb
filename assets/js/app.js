@@ -525,7 +525,7 @@
   function initCardFx() {
     if (!finePointer || reduceMotion) return;
     document.addEventListener("pointermove", (e) => {
-      const card = e.target.closest && e.target.closest(".card");
+      const card = e.target.closest && e.target.closest(".card, .tile");
       if (!card) return;
       const r = card.getBoundingClientRect();
       const px = e.clientX - r.left, py = e.clientY - r.top;
@@ -763,8 +763,8 @@
   grain.setAttribute("aria-hidden", "true");
   document.body.appendChild(grain);
 
-  renderHeader();
-  renderFooter();
+  const isApp = document.body.hasAttribute("data-app");
+  if (!isApp) { renderHeader(); renderFooter(); }
   setLang(lang);
   initSmoothScroll();
   initOrbs();
@@ -787,6 +787,6 @@
   if (hasGSAP) gsap.ticker.add(scrollTick);
   else (function loop() { scrollTick(); requestAnimationFrame(loop); })();
 
-  window.VK = { t, tr, setLang, getLang: () => lang, icon, formatDate, observeAll };
+  window.VK = { t, tr, setLang, getLang: () => lang, icon, formatDate, observeAll, logo: LOGO_MARK };
   window.VK_FORMAT_DATE = formatDate;
 })();
