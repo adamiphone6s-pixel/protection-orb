@@ -88,9 +88,9 @@
 
   const LOGO_MARK =
     '<svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">' +
-    '<defs><radialGradient id="lg" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#8d8a85"/><stop offset=".45" stop-color="#26262a"/><stop offset="1" stop-color="#0c0c0e"/></radialGradient></defs>' +
+    '<defs><radialGradient id="lg" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#6f8a7e"/><stop offset=".45" stop-color="#1f302a"/><stop offset="1" stop-color="#0f1c17"/></radialGradient></defs>' +
     '<circle cx="20" cy="20" r="14" fill="url(#lg)" stroke="currentColor" stroke-opacity=".18"/>' +
-    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="#ff4a1c" stroke-width="1.8" transform="rotate(-24 20 20)"/></svg>';
+    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="#c9a45c" stroke-width="1.8" transform="rotate(-24 20 20)"/></svg>';
 
   /* ================= Layout ================= */
   const NAV = [
@@ -299,8 +299,8 @@
         const x1 = x * cY - z * sY, z1 = x * sY + z * cY, y1 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
         const persp = 2.4 / (2.4 - z2), depth = (z2 + 1) / 2, mix = (y1 + 1) / 2;
         let r, g, b;
-        if (mix < 0.5) { const k = mix / 0.5; r = 242 - 90 * k; g = 239 - 92 * k; b = 233 - 95 * k; }
-        else { const k = (mix - 0.5) / 0.5; r = 152 + 103 * k; g = 147 - 73 * k; b = 138 - 110 * k; }
+        if (mix < 0.5) { const k = mix / 0.5; r = 241 - 106 * k; g = 236 - 90 * k; b = 226 - 87 * k; }
+        else { const k = (mix - 0.5) / 0.5; r = 135 + 66 * k; g = 146 + 18 * k; b = 139 - 47 * k; }
         ctx.fillStyle = "rgba(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + "," + (0.1 + depth * 0.9).toFixed(3) + ")";
         ctx.beginPath(); ctx.arc(cx + x1 * R * persp, cy + y1 * R * persp, 0.5 + depth * 1.8, 0, 6.2832); ctx.fill();
       }
@@ -633,13 +633,13 @@
   }
 
   /* ================= Hírek ================= */
-  const ART = [["#0c0c0e", "#ff4a1c"], ["#e2ded5", "#0c0c0e"], ["#ff4a1c", "#0c0c0e"], ["#232327", "#c9c4b9"], ["#c9c4b9", "#ff4a1c"], ["#161619", "#efece6"]];
+  const ART = [["#0f1c17", "#c9a45c"], ["#e5dfd2", "#0f1c17"], ["#c9a45c", "#0f1c17"], ["#1f302a", "#cfc6b3"], ["#cfc6b3", "#c9a45c"], ["#15241e", "#f1ece2"]];
   function newsArt(i) {
     const [a, b] = ART[i % ART.length];
     const shapes = [
-      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#efece6" opacity=".92"/>',
-      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#efece6"/>',
-      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#efece6" stroke-width="3" transform="rotate(-20 200 150)"/>',
+      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#f1ece2" opacity=".92"/>',
+      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#f1ece2"/>',
+      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#f1ece2" stroke-width="3" transform="rotate(-20 200 150)"/>',
       '<path d="M0 300 C 80 60 180 60 240 180 S 360 280 400 120 V 300 Z" fill="' + b + '"/>'
     ];
     return '<svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="300" fill="' + a + '"/>' + shapes[i % shapes.length] + "</svg>";

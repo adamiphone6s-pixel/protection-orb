@@ -64,11 +64,11 @@ void main(){
   vec3 ro=vec3(0.,0.,4.3);
   vec3 rd=normalize(vec3(uv,-1.75));
 
-  // Paletta: obszidián test, csontfehér stúdiófény, vermilion peremfény
-  vec3 accent=vec3(1.,.29,.11);
-  vec3 ember=vec3(.42,.08,.02);
-  vec3 bone=vec3(.95,.93,.9);
-  vec3 graphite=vec3(.055,.055,.062);
+  // Paletta: sötét smaragd üveg, krém stúdiófény, sárgaréz peremfény
+  vec3 accent=vec3(.84,.68,.38);
+  vec3 ember=vec3(.05,.3,.21);
+  vec3 bone=vec3(.96,.93,.86);
+  vec3 graphite=vec3(.025,.07,.055);
 
   // Befoglaló gömb — a sugarak nagy része gyorsan kilép
   float b=dot(ro,rd);float c=dot(ro,ro)-1.55*1.55;float h=b*b-c;
@@ -105,8 +105,8 @@ void main(){
       col+=bone*env*.5;
       col+=bone*strip*.32;
       // alsó, meleg visszaverődés
-      col+=ember*smoothstep(.35,1.,-n.y+band*.15)*.55;
-      // vermilion perem
+      col+=ember*smoothstep(.2,1.,-n.y+band*.25)*.8;
+      // sárgaréz perem
       col+=accent*pow(fres,2.2)*1.25;
       col+=bone*spec*.9;
       outc=vec4(col,1.);

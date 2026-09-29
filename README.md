@@ -26,7 +26,7 @@ Build nem kell, a `vercel.json` már be van állítva.
 
 ## Élmény és technika
 
-- **Színrendszer:** grafit (`--ink`), meleg csontfehér (`--paper`) és egyetlen kiemelőszín, a vermilion (`--accent: #ff4a1c`) — a szakszervezeti mozgalom hagyományos pirosának modern értelmezése. Minden szín az `assets/css/style.css` elején lévő tokenekben állítható.
+- **Színrendszer:** mélyzöld alap (`--ink: #0f1c17`), krém (`--paper: #f1ece2`) és sárgaréz kiemelő (`--accent: #c9a45c`; világos háttéren a mélyebb bronz `--accent-deep: #9c7a3a` az olvashatóságért). Minden szín az `assets/css/style.css` elején lévő tokenekben állítható.
 
 - **WebGL „védőgömb”** (`assets/js/orb-gl.js`): raymarcholt, zajjal torzított gömb, egérre és görgetésre reagál; WebGL nélkül 2D részecske-gömb a tartalék.
 - **Mozgás:** első látogatáskor betöltő animáció, körbe nyíló oldalváltás, sima görgetés (Lenis), szavanként/betűnként beúszó címek, görgetésre kivilágosodó kiáltvány, vízszintesen görgetett szolgáltatás-kártyák, egymásra csúszó lépések, mágneses gombok, egyedi kurzor (GSAP + ScrollTrigger).
