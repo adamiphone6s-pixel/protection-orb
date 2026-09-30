@@ -18,7 +18,11 @@
 - Kész: összes nyilvános oldal, kétnyelvűség, PWA, tagi felület (áttekintés, vállalati hírek, bérek és juttatások, dokumentumok, bizalmik, események) 3 minta vállalattal.
 - Demó: az űrlapok nincsenek szerverhez kötve; a belépés kliensoldali.
 
-## Javasolt éles architektúra (2. mérföldkő)
+## 2. mérföldkő — éles tagi rendszer (elkészült, beállításra vár)
+
+Megvalósítva: Supabase-alapú belépés, adatbázis RLS-sel, privát dokumentumtár, kötelező jelszócsere, admin felület (hírek, vállalati tartalom, tagok, CSV import, beérkezett üzenetek), valódi űrlap-beküldés spam-csapdával. Élesítés: [SETUP.md](SETUP.md).
+
+## Eredeti architektúra-javaslat (2. mérföldkő)
 
 1. **Hosting:** statikus front-end (Netlify / Vercel / Cloudflare Pages), HTTPS, saját domain.
 2. **Hitelesítés + adatok:** pl. Supabase (EU régió) vagy saját kis Node.js API:

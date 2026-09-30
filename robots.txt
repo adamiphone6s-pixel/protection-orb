@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /portal.html
+Disallow: /admin.html
+Disallow: /api/
 Disallow: /data/members.json
 Disallow: /data/companies/
 Sitemap: https://protection-orb.vercel.app/sitemap.xml

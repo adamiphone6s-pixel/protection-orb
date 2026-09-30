@@ -16,6 +16,12 @@ Majd: <http://localhost:3000> (ill. 8080).
 
 **Demó tagi belépés** (`login.html`): `PH-1001`, `EN-2001` vagy `CH-3001`, jelszó: `demo1234` — mindegyik más vállalat adatait mutatja.
 
+## Éles tagi rendszer és admin felület
+
+- **Admin felület:** `admin.html` — hírek, vállalati tartalmak (fájlfeltöltéssel), tagkezelés (egyenként / CSV import, jelszó-visszaállítás), beérkezett űrlapok.
+- **Háttér:** Supabase (EU) — belépés, adatbázis soronkénti jogosultsággal, privát dokumentumtár; `api/admin.js` Vercel-függvény a tagok létrehozásához.
+- **Beállítás:** [docs/SETUP.md](docs/SETUP.md). Amíg nincs beállítva, az oldal demó módban fut.
+
 ## Közzététel (Vercel)
 
 Build nem kell, a `vercel.json` már be van állítva.
@@ -49,7 +55,11 @@ Build nem kell, a `vercel.json` már be van állítva.
 | `assets/vendor/`, `assets/fonts/` | GSAP, ScrollTrigger, Lenis; önállóan kiszolgált betűtípusok |
 | `data/news.json` | Nyilvános hírek (kétnyelvű) |
 | `data/companies/*.json` | Vállalatonkénti tagi tartalom (havi frissítés) |
-| `data/members.json` | **Csak demó** tagkódok |
+| `data/members.json` | **Csak demó** tagkódok (éles módban nem használt) |
+| `admin.html`, `assets/js/admin.js` | Admin felület |
+| `assets/js/config.js`, `assets/js/backend.js` | Éles háttér beállítása és adatréteg (demó/éles) |
+| `api/admin.js` | Szerveroldali tagkezelés (service role) |
+| `supabase/schema.sql` | Adatbázis-séma és jogosultsági szabályok |
 | `manifest.webmanifest`, `sw.js` | Telepíthető „app” + offline működés |
 
 ## Havi frissítés

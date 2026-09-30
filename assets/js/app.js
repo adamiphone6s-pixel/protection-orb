@@ -653,7 +653,8 @@
   let newsCache = null;
   function loadNews() {
     if (newsCache) return Promise.resolve(newsCache);
-    return fetch("data/news.json", { cache: "no-cache" }).then((r) => r.json()).then((d) => (newsCache = d.items.sort((a, b) => b.date.localeCompare(a.date))));
+    const src = window.VKB ? window.VKB.loadNews() : fetch("data/news.json", { cache: "no-cache" }).then((r) => r.json()).then((d) => d.items);
+    return src.then((items) => (newsCache = items.slice().sort((a, b) => b.date.localeCompare(a.date))));
   }
   function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
   function newsCardHTML(item, i, lead) {
@@ -732,15 +733,30 @@
 
   /* ================= Űrlapok (demó) ================= */
   function initForms() {
+    const live = !!(window.VKB && window.VKB.live);
     document.querySelectorAll("form[data-demo-form]").forEach((form) => {
-      form.addEventListener("submit", (e) => {
+      if (live) form.querySelectorAll(".form-note[data-i18n='join.form.demo']").forEach((n) => n.remove());
+      // Rejtett spam-csapda: ember nem tölti ki
+      const hp = document.createElement("input");
+      hp.type = "text"; hp.name = "website"; hp.tabIndex = -1; hp.autocomplete = "off";
+      hp.setAttribute("aria-hidden", "true");
+      hp.style.cssText = "position:absolute;left:-9999px;width:1px;height:1px;opacity:0";
+      form.appendChild(hp);
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!form.checkValidity()) { form.reportValidity(); return; }
         const box = form.querySelector("[data-form-status]");
-        box.hidden = false;
-        box.className = "alert alert--ok";
-        box.textContent = t(form.dataset.okKey);
-        form.reset();
+        const btn = form.querySelector('button[type="submit"]');
+        const data = Object.fromEntries(new FormData(form).entries());
+        const done = () => { box.hidden = false; box.className = "alert alert--ok"; box.textContent = t(form.dataset.okKey); form.reset(); };
+        if (data.website) { done(); return; }
+        btn.disabled = true;
+        try {
+          if (window.VKB) await window.VKB.submit(form.dataset.kind || "contact", data);
+          done();
+        } catch (err) {
+          box.hidden = false; box.className = "alert alert--err"; box.textContent = t("form.error");
+        } finally { btn.disabled = false; }
       });
     });
   }

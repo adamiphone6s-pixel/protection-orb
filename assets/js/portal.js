@@ -69,7 +69,13 @@
   /* ---------- Login ---------- */
   const form = document.querySelector("[data-login]");
   if (form) {
-    if (getSession()) location.replace("portal.html");
+    const B = window.VKB;
+    if (B && B.live) {
+      // Éles mód: nincs demó-hozzáférés; ha már be van lépve, továbbengedjük
+      const demo = document.querySelector(".demo-box");
+      if (demo) demo.remove();
+      B.currentMember().then((m) => { if (m) location.replace(m.company_id ? "portal.html" : "admin.html"); }).catch(() => {});
+    } else if (getSession()) location.replace("portal.html");
     const err = form.querySelector("[data-login-error]");
     const code = form.querySelector("#code");
     const pw = form.querySelector("#password");
@@ -86,14 +92,23 @@
       e.preventDefault();
       err.hidden = true;
       const c = code.value.trim().toUpperCase();
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
       try {
-        const [hash, db] = await Promise.all([
-          sha256(c + ":" + pw.value),
-          fetch("data/members.json", { cache: "no-cache" }).then((r) => r.json())
-        ]);
-        const m = db.members.find((x) => x.code === c && x.hash === hash);
-        if (!m) throw new Error("auth");
-        setSession({ code: m.code, name: m.name, company: m.company });
+        let target = "portal.html";
+        if (B && B.live) {
+          const m = await B.login(c, pw.value);
+          setSession({ code: m.code, name: m.name, company: m.company_id });
+          if (!m.company_id) target = "admin.html";
+        } else {
+          const [hash, db] = await Promise.all([
+            sha256(c + ":" + pw.value),
+            fetch("data/members.json", { cache: "no-cache" }).then((r) => r.json())
+          ]);
+          const m = db.members.find((x) => x.code === c && x.hash === hash);
+          if (!m) throw new Error("auth");
+          setSession({ code: m.code, name: m.name, company: m.company });
+        }
         // Siker: pipa a gombon, majd függönyös átmenet a tagi felületre
         form.classList.add("is-success");
         const lbl = form.querySelector('button[type="submit"] [data-i18n]');
@@ -106,10 +121,11 @@
             curtain.classList.remove("no-anim", "is-out");
             curtain.classList.add("is-in");
             try { sessionStorage.setItem("vk-curtain", "1"); } catch (x) {}
-            setTimeout(() => (location.href = "portal.html"), 780);
-          } else location.href = "portal.html";
+            setTimeout(() => (location.href = target), 780);
+          } else location.href = target;
         }, 650);
       } catch (ex) {
+        btn.disabled = false;
         err.hidden = false;
         form.classList.remove("shake"); void form.offsetWidth; form.classList.add("shake");
       }
@@ -119,8 +135,9 @@
   /* ---------- Tagi app ---------- */
   const root = document.querySelector("[data-portal]");
   if (!root) return;
-  const session = getSession();
-  if (!session) { location.replace("login.html"); return; }
+  const B = window.VKB;
+  let session = getSession();
+  if (!(B && B.live) && !session) { location.replace("login.html"); return; }
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const VIEWS = ["overview", "news", "wages", "docs", "contacts", "events"];
@@ -147,7 +164,8 @@
     scale: '<path d="M12 3v18M5 21h14M4 8h16M7 8l-3 7a3 3 0 0 0 6 0L7 8Zm10 0-3 7a3 3 0 0 0 6 0l-3-7Z"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
     arrowUR: '<path d="M7 17 17 7M8 7h9v9"/>',
-    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'
   };
   const ic = (n, cls) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : "") + ">" + I[n] + "</svg>";
   const L = () => (VK.getLang() === "hu" ? "hu-HU" : "en-GB");
@@ -502,7 +520,11 @@
   root.addEventListener("click", (e) => {
     const v = e.target.closest("[data-view]");
     if (v) { e.preventDefault(); go(v.dataset.view, true); return; }
-    if (e.target.closest("[data-logout]")) { setSession(null); location.href = "login.html"; return; }
+    if (e.target.closest("[data-logout]")) {
+      setSession(null);
+      Promise.resolve(B && B.live ? B.logout() : null).finally(() => (location.href = "login.html"));
+      return;
+    }
     if (e.target.closest("[data-cmdk]")) { cmdkOpen(); return; }
     const ics = e.target.closest("[data-ics], [data-ics-date]");
     if (ics) {
@@ -531,8 +553,62 @@
   window.addEventListener("resize", moveIndicator);
   document.addEventListener("langchange", () => { if (company) renderShell(); });
 
-  fetch("data/companies/" + encodeURIComponent(session.company) + ".json", { cache: "no-cache" })
-    .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-    .then((c) => { company = c; renderShell(); })
-    .catch(() => { setSession(null); location.replace("login.html"); });
+  /* --- Első belépés: kötelező jelszócsere (éles mód) --- */
+  function askNewPassword() {
+    const m = document.createElement("div");
+    m.className = "cmdk is-open pw-modal";
+    m.setAttribute("role", "dialog");
+    m.setAttribute("aria-modal", "true");
+    m.innerHTML =
+      '<form class="cmdk-panel" style="padding:clamp(24px,4vw,40px);gap:16px" novalidate>' +
+      '<h2 style="font-size:clamp(26px,3vw,36px);letter-spacing:-0.04em">' + t("portal.pw.title") + "</h2>" +
+      '<p style="color:var(--on-ink-muted)">' + t("portal.pw.lead") + "</p>" +
+      '<label class="field-dark" style="max-width:none">' + ic("lock") + '<input type="password" name="p1" autocomplete="new-password" placeholder="' + t("portal.pw.new") + '" aria-label="' + t("portal.pw.new") + '" required minlength="10"></label>' +
+      '<label class="field-dark" style="max-width:none">' + ic("lock") + '<input type="password" name="p2" autocomplete="new-password" placeholder="' + t("portal.pw.confirm") + '" aria-label="' + t("portal.pw.confirm") + '" required minlength="10"></label>' +
+      '<p class="alert alert--err" hidden role="alert"></p>' +
+      '<button class="btn btn--volt btn--block" type="submit">' + t("portal.pw.save") + "</button></form>";
+    document.body.appendChild(m);
+    const f = m.querySelector("form"), er = m.querySelector(".alert");
+    setTimeout(() => f.p1.focus(), 50);
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      er.hidden = true;
+      const p1 = f.p1.value, p2 = f.p2.value;
+      const fail = (k) => { er.textContent = t(k); er.hidden = false; };
+      if (p1.length < 10) return fail("portal.pw.short");
+      if (p1 !== p2) return fail("portal.pw.mismatch");
+      f.querySelector("button").disabled = true;
+      try {
+        await B.changePassword(p1);
+        m.remove();
+        notify(t("portal.pw.ok"));
+      } catch (ex) {
+        f.querySelector("button").disabled = false;
+        fail("portal.pw.error");
+      }
+    });
+  }
+
+  (async () => {
+    try {
+      if (B && B.live) {
+        const m = await B.currentMember();
+        if (!m) throw new Error("nosession");
+        if (!m.company_id) { location.replace("admin.html"); return; }
+        session = { code: m.code, name: m.name, company: m.company_id };
+        company = await B.loadCompany(m.company_id);
+        renderShell();
+        if (m.must_change_password) askNewPassword();
+      } else {
+        const r = await fetch("data/companies/" + encodeURIComponent(session.company) + ".json", { cache: "no-cache" });
+        if (!r.ok) throw new Error("company");
+        company = await r.json();
+        renderShell();
+      }
+    } catch (e) {
+      setSession(null);
+      location.replace("login.html");
+    }
+  })();
+
 })();

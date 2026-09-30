@@ -1,8 +1,8 @@
 /* Service worker: offline váz + friss adatok (network-first a /data alatt). */
-const CACHE = "vk-v8";
+const CACHE = "vk-v9";
 const SHELL = [
   "./", "index.html", "about.html", "services.html", "news.html", "join.html", "contact.html", "login.html", "portal.html", "privacy.html",
-  "assets/css/style.css?v=8", "assets/css/fonts.css?v=8", "assets/js/i18n.js?v=8", "assets/js/app.js?v=8", "assets/js/orb-gl.js?v=8", "assets/js/portal.js?v=8",
+  "assets/css/style.css?v=9", "assets/css/fonts.css?v=9", "assets/js/i18n.js?v=9", "assets/js/app.js?v=9", "assets/js/orb-gl.js?v=9", "assets/js/portal.js?v=9", "assets/js/backend.js?v=9",
   "assets/vendor/gsap.min.js", "assets/vendor/ScrollTrigger.min.js", "assets/vendor/lenis.min.js",
   "assets/fonts/Unbounded-normal-latin.woff2", "assets/fonts/Manrope-normal-latin.woff2",
   "assets/img/icon.svg", "manifest.webmanifest"
@@ -19,7 +19,9 @@ self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
   // Tagi adatokat nem cache-elünk; a nyilvános híreket hálózatról, offline esetén cache-ből.
   if (url.pathname.includes("/data/companies/") || url.pathname.endsWith("/data/members.json")) return;
-  const networkFirst = url.pathname.includes("/data/") || e.request.mode === "navigate";
+  // Admin API és admin felület: soha ne kerüljön gyorsítótárba
+  if (url.pathname.startsWith("/api/") || url.pathname.endsWith("/admin.html")) return;
+  const networkFirst = url.pathname.includes("/data/") || url.pathname.endsWith("/config.js") || e.request.mode === "navigate";
   if (networkFirst) {
     e.respondWith(fetch(e.request).then((res) => {
       const copy = res.clone();
