@@ -341,6 +341,11 @@ a:hover .roll > span, button:hover .roll > span { transform: translateY(-50%); }
   .hero-title { text-align: left; }
 }
 
+@media (max-width: 600px) {
+  .hero-intro .hero-top { padding-top: calc(var(--header-h) + 12px); }
+  .hero-intro .hero-badge { display: none; }
+}
+
 /* ---------- Manifesto ---------- */
 .manifesto { padding-block: clamp(120px, 18vw, 260px); }
 .manifesto-text { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 4.4vw, 68px); letter-spacing: -0.04em; line-height: 1.12; max-width: 22ch; }

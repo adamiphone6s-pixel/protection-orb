@@ -136,6 +136,7 @@ window.I18N = {
     "footer.privacy": "Adatvédelem",
     "footer.rights": "Minden jog fenntartva.",
     "footer.install": "Telepítsd appként",
+    "install.ios": "Megosztás → Főképernyőhöz adás",
     "footer.top": "Vissza fel",
 
     "about.eyebrow": "Rólunk",
@@ -430,6 +431,7 @@ window.I18N = {
     "footer.privacy": "Privacy",
     "footer.rights": "All rights reserved.",
     "footer.install": "Install as app",
+    "install.ios": "Share → Add to Home Screen",
     "footer.top": "Back to top",
 
     "about.eyebrow": "About us",

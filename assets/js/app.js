@@ -764,14 +764,28 @@
   /* ================= PWA ================= */
   function initPWA() {
     if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(() => {});
+    if (matchMedia("(display-mode: standalone)").matches || navigator.standalone === true) {
+      document.querySelectorAll(".install-link").forEach((b) => b.remove());
+      return;
+    }
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
     let deferred = null;
+    const showInstall = () => document.querySelectorAll(".install-link").forEach((b) => (b.hidden = false));
+    if (ios) showInstall();
     addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferred = e;
-      document.querySelectorAll(".install-link").forEach((b) => (b.hidden = false));
+      showInstall();
     });
     document.addEventListener("click", (e) => {
-      if (e.target.closest && e.target.closest(".install-link") && deferred) { deferred.prompt(); deferred = null; }
+      const btn = e.target.closest && e.target.closest(".install-link");
+      if (!btn) return;
+      if (deferred) { deferred.prompt(); deferred = null; return; }
+      if (ios) {
+        const label = btn.textContent;
+        btn.textContent = t("install.ios");
+        setTimeout(() => (btn.textContent = label), 4000);
+      }
     });
   }
 
