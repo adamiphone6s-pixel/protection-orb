@@ -762,6 +762,23 @@
   }
 
   /* ================= PWA ================= */
+  function showIosSteps() {
+    let panel = document.querySelector(".ios-install");
+    if (!panel) {
+      panel = document.createElement("div");
+      panel.className = "ios-install";
+      panel.innerHTML =
+        '<div class="ios-install-card"><p class="ios-install-title">' + t("install.ios.title") + "</p>" +
+        "<ol><li>" + t("install.ios.s1") + "</li><li>" + t("install.ios.s2") + "</li><li>" + t("install.ios.s3") + "</li></ol>" +
+        '<button type="button" class="btn btn--volt btn--block ios-install-close">' + t("install.ios.close") + "</button></div>";
+      panel.addEventListener("click", (e) => {
+        if (e.target === panel || e.target.closest(".ios-install-close")) panel.classList.remove("is-open");
+      });
+      document.body.appendChild(panel);
+    }
+    requestAnimationFrame(() => panel.classList.add("is-open"));
+  }
+
   function initPWA() {
     if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(() => {});
     if (matchMedia("(display-mode: standalone)").matches || navigator.standalone === true) {
@@ -781,11 +798,7 @@
       const btn = e.target.closest && e.target.closest(".install-link");
       if (!btn) return;
       if (deferred) { deferred.prompt(); deferred = null; return; }
-      if (ios) {
-        const label = btn.textContent;
-        btn.textContent = t("install.ios");
-        setTimeout(() => (btn.textContent = label), 4000);
-      }
+      if (ios) showIosSteps();
     });
   }
 
