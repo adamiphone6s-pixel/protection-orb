@@ -762,7 +762,7 @@
   }
 
   /* ================= PWA ================= */
-  function showInstallSteps(ios) {
+  function showInstallSteps(ios, otherBrowser) {
     let panel = document.querySelector(".ios-install");
     if (!panel) {
       panel = document.createElement("div");
@@ -773,9 +773,11 @@
       document.body.appendChild(panel);
     }
     const k = ios ? "install.ios" : "install.any";
+    const steps = [t(k + ".s1"), t(k + ".s2"), t(k + ".s3")];
+    if (otherBrowser) steps.unshift(t("install.ios.openSafari"));
     panel.innerHTML =
       '<div class="ios-install-card"><p class="ios-install-title">' + t(k + ".title") + "</p>" +
-      "<ol><li>" + t(k + ".s1") + "</li><li>" + t(k + ".s2") + "</li><li>" + t(k + ".s3") + "</li></ol>" +
+      "<ol>" + steps.map((s) => "<li>" + s + "</li>").join("") + "</ol>" +
       '<button type="button" class="btn btn--volt btn--block ios-install-close">' + t(k + ".close") + "</button></div>";
     requestAnimationFrame(() => panel.classList.add("is-open"));
   }
@@ -797,7 +799,7 @@
       const btn = e.target.closest && e.target.closest(".install-link");
       if (!btn) return;
       if (deferred) { deferred.prompt(); deferred = null; return; }
-      showInstallSteps(ios);
+      showInstallSteps(ios, ios && /CriOS|FxiOS|EdgiOS|OPiOS|FBAN|FBAV|Instagram/i.test(navigator.userAgent));
     });
   }
 
