@@ -141,6 +141,11 @@ window.I18N = {
     "install.ios.s2": "Görgess le, és válaszd a Főképernyőhöz adás lehetőséget.",
     "install.ios.s3": "Koppints a Hozzáadás gombra a jobb felső sarokban.",
     "install.ios.close": "Rendben",
+    "install.any.title": "Telepítés az appba",
+    "install.any.s1": "Nyisd meg a böngésző menüjét (⋮ vagy ⋯).",
+    "install.any.s2": "Válaszd a Telepítés vagy a Főképernyőhöz adás lehetőséget.",
+    "install.any.s3": "Erősítsd meg a Telepítés gombbal.",
+    "install.any.close": "Rendben",
     "footer.top": "Vissza fel",
 
     "about.eyebrow": "Rólunk",
@@ -440,6 +445,11 @@ window.I18N = {
     "install.ios.s2": "Scroll down and choose Add to Home Screen.",
     "install.ios.s3": "Tap Add in the top right corner.",
     "install.ios.close": "OK",
+    "install.any.title": "Install the app",
+    "install.any.s1": "Open the browser menu (⋮ or ⋯).",
+    "install.any.s2": "Choose Install app or Add to Home screen.",
+    "install.any.s3": "Confirm with Install.",
+    "install.any.close": "OK",
     "footer.top": "Back to top",
 
     "about.eyebrow": "About us",

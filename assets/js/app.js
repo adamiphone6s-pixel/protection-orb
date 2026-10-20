@@ -762,20 +762,21 @@
   }
 
   /* ================= PWA ================= */
-  function showIosSteps() {
+  function showInstallSteps(ios) {
     let panel = document.querySelector(".ios-install");
     if (!panel) {
       panel = document.createElement("div");
       panel.className = "ios-install";
-      panel.innerHTML =
-        '<div class="ios-install-card"><p class="ios-install-title">' + t("install.ios.title") + "</p>" +
-        "<ol><li>" + t("install.ios.s1") + "</li><li>" + t("install.ios.s2") + "</li><li>" + t("install.ios.s3") + "</li></ol>" +
-        '<button type="button" class="btn btn--volt btn--block ios-install-close">' + t("install.ios.close") + "</button></div>";
       panel.addEventListener("click", (e) => {
         if (e.target === panel || e.target.closest(".ios-install-close")) panel.classList.remove("is-open");
       });
       document.body.appendChild(panel);
     }
+    const k = ios ? "install.ios" : "install.any";
+    panel.innerHTML =
+      '<div class="ios-install-card"><p class="ios-install-title">' + t(k + ".title") + "</p>" +
+      "<ol><li>" + t(k + ".s1") + "</li><li>" + t(k + ".s2") + "</li><li>" + t(k + ".s3") + "</li></ol>" +
+      '<button type="button" class="btn btn--volt btn--block ios-install-close">' + t(k + ".close") + "</button></div>";
     requestAnimationFrame(() => panel.classList.add("is-open"));
   }
 
@@ -787,18 +788,16 @@
     }
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
     let deferred = null;
-    const showInstall = () => document.querySelectorAll(".install-link").forEach((b) => (b.hidden = false));
-    if (ios) showInstall();
+    document.querySelectorAll(".install-link").forEach((b) => (b.hidden = false));
     addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferred = e;
-      showInstall();
     });
     document.addEventListener("click", (e) => {
       const btn = e.target.closest && e.target.closest(".install-link");
       if (!btn) return;
       if (deferred) { deferred.prompt(); deferred = null; return; }
-      if (ios) showIosSteps();
+      showInstallSteps(ios);
     });
   }
 
