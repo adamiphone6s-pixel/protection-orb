@@ -22,6 +22,13 @@ Majd: <http://localhost:3000> (ill. 8080).
 - **Háttér:** Supabase (EU) — belépés, adatbázis soronkénti jogosultsággal, privát dokumentumtár; `api/admin.js` Vercel-függvény a tagok létrehozásához.
 - **Beállítás:** [docs/SETUP.md](docs/SETUP.md). Amíg nincs beállítva, az oldal demó módban fut.
 
+## Digitális névjegy (`/nevjegy/`)
+
+Önálló, telepíthető névjegy-app: „Mentés a névjegyekbe” (vCard), QR-kód, link megosztása és NFC-matrica írása (Androidon Chrome-ból).
+
+- **Adatok:** csak a `nevjegy/adatok.js` fájlt kell átírni (név, telefon, e-mail, linkek, opcionális fotó a `nevjegy/img` mappában).
+- **Hozzáérintéses átadás:** egy üres NFC-matricára/-kártyára (NTAG213/215/216) felírt link a névjegy címére mutat; bármelyik NFC-s telefon hozzáérintéskor megnyitja, onnan egy koppintással elmenthető. Két telefon közvetlenül weboldalból nem tud NFC-n adatot cserélni, ezért kell a matrica vagy a QR-kód.
+
 ## Közzététel (Vercel)
 
 Build nem kell, a `vercel.json` már be van állítva.

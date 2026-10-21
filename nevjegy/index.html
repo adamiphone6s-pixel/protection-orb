@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Névjegy</title>
+  <meta name="description" content="Digitális névjegy — egy koppintással elmenthető a telefon névjegyei közé.">
+  <meta name="theme-color" content="#0f1c17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Névjegy">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="img/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+  <link rel="stylesheet" href="../assets/css/fonts.css">
+  <link rel="stylesheet" href="nevjegy.css?v=1">
+</head>
+<body>
+  <main class="card" aria-live="polite">
+    <header class="profile">
+      <div class="avatar" id="avatar" aria-hidden="true"></div>
+      <h1 id="name"></h1>
+      <p class="role" id="role"></p>
+      <p class="bio" id="bio"></p>
+    </header>
+
+    <button type="button" class="btn btn--primary" id="save">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+      Mentés a névjegyekbe
+    </button>
+
+    <nav class="actions" id="actions" aria-label="Elérhetőségek"></nav>
+    <nav class="links" id="links" aria-label="Közösségi oldalak"></nav>
+
+    <section class="tools" aria-label="Megosztás">
+      <p class="tools-title">Megosztás</p>
+      <div class="tools-grid">
+        <button type="button" class="tool" id="showQr">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2"/></svg>
+          QR-kód
+        </button>
+        <button type="button" class="tool" id="share">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+          Link küldése
+        </button>
+        <button type="button" class="tool" id="nfc">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8.5a5 5 0 0 1 0 7M9.5 6a8.5 8.5 0 0 1 0 12M13 4a11 11 0 0 1 0 16"/></svg>
+          NFC-matrica
+        </button>
+      </div>
+      <button type="button" class="install" id="install" hidden>Telepítés appként a kezdőképernyőre</button>
+    </section>
+  </main>
+
+  <div class="sheet" id="qrSheet" hidden>
+    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+      <p class="sheet-title" id="qrTitle">Olvasd be a kamerával</p>
+      <div class="qr" id="qr"></div>
+      <p class="sheet-note">A kamera megnyitja a névjegyet, onnan egy koppintással elmenthető.</p>
+      <button type="button" class="btn btn--primary" data-close>Kész</button>
+    </div>
+  </div>
+
+  <div class="sheet" id="infoSheet" hidden>
+    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+      <p class="sheet-title" id="infoTitle"></p>
+      <div class="sheet-body" id="infoBody"></div>
+      <button type="button" class="btn btn--primary" data-close>Rendben</button>
+    </div>
+  </div>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <script src="adatok.js?v=1"></script>
+  <script src="vendor/qrcode.js"></script>
+  <script src="nevjegy.js?v=1"></script>
+</body>
+</html>
