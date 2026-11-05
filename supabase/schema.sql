@@ -1,5 +1,5 @@
 -- ==========================================================================
--- Védőkör — adatbázis-séma (Supabase / PostgreSQL)
+-- Chinoin VDSZ — adatbázis-séma (Supabase / PostgreSQL)
 -- Futtatás: Supabase Dashboard → SQL Editor → illeszd be és futtasd (Run).
 -- Többször is lefuttatható (idempotens).
 --

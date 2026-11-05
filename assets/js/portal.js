@@ -230,8 +230,8 @@
     const d2 = next.toISOString().slice(0, 10).replace(/-/g, "");
     const clean = (s) => String(s).replace(/[,;\\]/g, (m) => "\\" + m).replace(/\n/g, "\\n");
     const ics = [
-      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Vedokor//Tagi felulet//HU", "BEGIN:VEVENT",
-      "UID:" + d + "-" + Math.random().toString(36).slice(2) + "@vedokor.hu",
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ChinoinVDSZ//Tagi felulet//HU", "BEGIN:VEVENT",
+      "UID:" + d + "-" + Math.random().toString(36).slice(2) + "@chinoinvdsz.hu",
       "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z",
       "DTSTART;VALUE=DATE:" + d, "DTEND;VALUE=DATE:" + d2,
       "SUMMARY:" + clean(tr(ev.title)), "DESCRIPTION:" + clean(tr(ev.text) + " — " + company.name),
@@ -240,7 +240,7 @@
     const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
     const a = document.createElement("a");
     a.href = url;
-    a.download = "vedokor-" + ev.date + ".ics";
+    a.download = "chinoinvdsz-" + ev.date + ".ics";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -266,8 +266,11 @@
       '<div class="tiles">' +
       // KPI
       '<article class="tile tile--accent s-5 rise" style="--i:2"><div class="top"><small>' + t("portal.wage.increase") + '</small><a href="#wages" data-view="wages" class="corner stretched" aria-label="' + t("portal.tab.wages") + '">' + ic("arrowUR") + "</a></div>" +
-      '<div class="kpi" data-kpi="' + esc(kpi) + '">' + esc(kpi) + "</div>" +
-      '<div class="foot"><p style="max-width:26ch">' + esc(tr(c.wages.note)) + '</p><div class="spark" style="width:140px">' + bars + "</div></div></article>" +
+      (kpi
+        ? '<div class="kpi" data-kpi="' + esc(kpi) + '">' + esc(kpi) + "</div>" +
+          '<div class="foot"><p style="max-width:26ch">' + esc(tr(c.wages.note)) + '</p><div class="spark" style="width:140px">' + bars + "</div></div>"
+        : '<p style="margin-top:auto;max-width:30ch">' + t("portal.pending") + "</p>") +
+      "</article>" +
       // Visszaszámlálás
       '<article class="tile s-4 rise" style="--i:3"><div class="top"><small>' + t("portal.nextEvent") + "</small></div>" +
       (next
@@ -276,7 +279,11 @@
         : "<p>" + t("portal.events.none") + "</p>") +
       "</article>" +
       // Tagok
-      '<article class="tile s-3 rise" style="--i:4"><small>' + t("portal.company") + '</small><div class="kpi" style="font-size:clamp(44px,4.4vw,68px)" data-kpi="' + c.memberCount + '">' + nf(c.memberCount) + "</div><p>" + t("portal.members") + '</p><div class="foot"><div class="faces">' + faces + "</div></div></article>" +
+      '<article class="tile s-3 rise" style="--i:4"><small>' + t("portal.company") + "</small>" +
+      (c.memberCount
+        ? '<div class="kpi" style="font-size:clamp(44px,4.4vw,68px)" data-kpi="' + c.memberCount + '">' + nf(c.memberCount) + "</div><p>" + t("portal.members") + "</p>"
+        : '<h3 style="margin-top:auto">' + esc(c.name) + "</h3>") +
+      '<div class="foot"><div class="faces">' + faces + "</div></div></article>" +
       // Kiemelt hír
       '<article class="tile tile--bone s-7 rise" style="--i:5"><div class="top"><small>' + t("portal.highlight") + '</small><a href="#news" data-view="news" class="corner stretched" aria-label="' + t("portal.allnews") + '">' + ic("arrowUR") + "</a></div>" +
       '<h2 style="font-size:clamp(28px,3vw,44px);max-width:18ch;margin-top:auto">' + esc(tr(c.highlight.title)) + '</h2><p style="max-width:56ch">' + esc(tr(c.highlight.text)) + "</p></article>" +
@@ -284,17 +291,18 @@
       '<article class="tile s-5 rise" style="--i:6"><small>' + t("portal.quick") + '</small><div class="quick">' +
       (firstContact ? '<a href="tel:' + esc(firstContact.phone.replace(/\s/g, "")) + '">' + ic("phone") + "<span>" + t("portal.quick.call") + '</span><span class="go">' + ic("arrow") + "</span></a>" : "") +
       (firstDoc ? '<a href="#docs" data-view="docs">' + ic("file") + "<span>" + t("portal.quick.doc") + '</span><span class="go">' + ic("arrow") + "</span></a>" : "") +
-      '<a href="tel:+3610000001">' + ic("scale") + "<span>" + t("portal.quick.legal") + '</span><span class="go">' + ic("arrow") + "</span></a>" +
+      '<a href="tel:+3615051678">' + ic("scale") + "<span>" + t("portal.quick.legal") + '</span><span class="go">' + ic("arrow") + "</span></a>" +
       "</div></article>" +
       // Friss hírek
       '<article class="tile s-12 rise" style="--i:7;min-height:0"><div class="top"><small>' + t("portal.tab.news") + '</small><a href="#news" data-view="news" class="link-arrow" style="font-size:14px">' + t("portal.allnews") + " →</a></div>" +
-      '<div class="feed">' + c.news.slice(0, 2).map((n) => "<article>" + dayMon(n.date) + "<div><h3>" + esc(tr(n.title)) + "</h3><p>" + esc(tr(n.text)) + "</p></div></article>").join("") + "</div></article>" +
+      (c.news.length ? '<div class="feed">' + c.news.slice(0, 2).map((n) => "<article>" + dayMon(n.date) + "<div><h3>" + esc(tr(n.title)) + "</h3><p>" + esc(tr(n.text)) + "</p></div></article>").join("") + "</div>" : "<p>" + t("portal.pending") + "</p>") + "</article>" +
       "</div>";
   }
   function head(key, extra) {
     return '<div class="view-head"><h1 class="rise" style="--i:0">' + t(key) + "</h1>" + (extra || "") + "</div>";
   }
   function vNews(c) {
+    if (!c.news.length) return head("portal.head.news") + '<p class="empty-dark">' + t("portal.pending") + "</p>";
     return head("portal.head.news") +
       '<div class="feed">' + c.news.map((n, i) =>
         '<article class="rise" style="--i:' + (i + 1) + '">' + dayMon(n.date) + "<div><h3>" + esc(tr(n.title)) + "</h3><p>" + esc(tr(n.text)) + "</p></div>" +
@@ -302,6 +310,7 @@
   }
   function vWages(c) {
     const w = c.wages;
+    if (!w.increase) return head("portal.head.wages") + '<p class="empty-dark">' + t("portal.pending") + "</p>";
     return head("portal.head.wages") +
       '<div class="tiles">' +
       '<article class="tile tile--accent s-5 rise" style="--i:1;min-height:340px"><small>' + t("portal.wage.increase") + '</small><div class="kpi" style="margin-top:auto;font-size:clamp(64px,6.6vw,116px)" data-kpi="' + esc(w.increase) + '">' + esc(w.increase) + "</div><p>" + esc(tr(w.note)) + "</p></article>" +
@@ -315,7 +324,7 @@
   function docCards(c) {
     const q = docFilter.trim().toLowerCase();
     const list = c.documents.filter((d) => !q || (tr(d.title) + " " + tr(d.meta) + " " + d.type).toLowerCase().includes(q));
-    if (!list.length) return '<p class="empty-dark">' + t("portal.docs.none") + "</p>";
+    if (!list.length) return '<p class="empty-dark">' + t(c.documents.length ? "portal.docs.none" : "portal.pending") + "</p>";
     return '<div class="docs">' + list.map((d, i) =>
       '<article class="doc rise" style="--i:' + (i + 1) + '"><span class="type">' + esc(d.type) + "</span><h3>" + esc(tr(d.title)) + "</h3><p>" + esc(tr(d.meta)) + '</p><a class="open" href="' + esc(d.url) + '">' + t("portal.docs.download") + " " + ic("arrowUR").replace("<svg", '<svg width="16" height="16"') + "</a></article>").join("") + "</div>";
   }
@@ -324,6 +333,7 @@
       '<div data-doc-list>' + docCards(c) + "</div>";
   }
   function vContacts(c) {
+    if (!c.contacts.length) return head("portal.head.contacts") + '<p class="empty-dark">' + t("portal.pending") + "</p>";
     return head("portal.head.contacts") +
       '<div class="people-app">' + c.contacts.map((p, i) =>
         '<article class="pc rise" style="--i:' + (i + 1) + '"><div class="av" style="--p:' + (55 + (i * 17) % 40) + '%">' + esc(initials(p.name)) + "</div>" +
@@ -357,7 +367,7 @@
     const logo = VK.logo || "";
     root.innerHTML =
       '<aside class="app-side" aria-label="' + t("portal.menu") + '">' +
-      '<a class="logo" href="index.html">' + logo + '<span><span>Védőkör</span><small data-i18n="brand.tag">' + t("brand.tag") + "</small></span></a>" +
+      '<a class="logo" href="index.html">' + logo + '<span><span>Chinoin VDSZ</span><small data-i18n="brand.tag">' + t("brand.tag") + "</small></span></a>" +
       '<div class="app-side-label">' + t("portal.menu") + "</div>" +
       '<nav class="app-nav"><span class="ind" aria-hidden="true"></span>' + navLinks() + "</nav>" +
       '<div class="app-me"><div class="row"><span class="badge">' + esc(c.short) + "</span><div><b>" + esc(c.name) + "</b><small>" + t("portal.code") + ": " + esc(session.code) + "</small></div></div>" +
@@ -365,7 +375,7 @@
       "</aside>" +
       '<main class="app-main" id="main">' +
       '<div class="app-top">' +
-      '<a class="logo" href="index.html" aria-label="Védőkör">' + logo + "<span></span></a>" +
+      '<a class="logo" href="index.html" aria-label="Chinoin VDSZ">' + logo + "<span></span></a>" +
       '<div class="crumb"><span>' + esc(c.name) + '</span><i></i><b data-crumb>' + t("portal.tab." + view) + "</b></div>" +
       '<div class="spacer"></div>' +
       '<button class="search-btn" type="button" data-cmdk>' + ic("search") + "<span>" + t("portal.search") + "</span><kbd>" + (/Mac|iPhone|iPad/.test(navigator.platform) ? "⌘K" : "Ctrl K") + "</kbd></button>" +

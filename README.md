@@ -1,8 +1,8 @@
-# Védőkör Szakszervezet — weboldal
+# Chinoin VDSZ Szakszervezet — weboldal
 
 Kétnyelvű (HU/EN), mobilra optimalizált, telepíthető (PWA) szakszervezeti weboldal nyilvános résszel és vállalatonként szétválasztott **tagi felülettel**.
 
-> A „Védőkör” munkanév és a minta vállalatok/nevek helyőrzők — a végleges nevet, logót, színeket és tartalmat a megrendelő adja.
+> A Chinoin Vegyipari Dolgozók Szakszervezete oldala. A hiányzó tartalmak listája: [docs/TARTALOM.md](docs/TARTALOM.md).
 
 ## Futtatás helyben
 
@@ -14,7 +14,7 @@ npx serve .          # vagy: python3 -m http.server 8080
 
 Majd: <http://localhost:3000> (ill. 8080).
 
-**Demó tagi belépés** (`login.html`): `PH-1001`, `EN-2001` vagy `CH-3001`, jelszó: `demo1234` — mindegyik más vállalat adatait mutatja.
+**Demó tagi belépés** (`login.html`): `CH-1001`, `EA-2001`, `OC-3001`, `OH-4001` vagy `SA-5001`, jelszó: `demo1234` — mindegyik más vállalat felületét mutatja.
 
 ## Éles tagi rendszer és admin felület
 
@@ -32,7 +32,7 @@ Build nem kell, a `vercel.json` már be van állítva.
 
 ## Élmény és technika
 
-- **Színrendszer:** mélyzöld alap (`--ink: #0f1c17`), krém (`--paper: #f1ece2`) és sárgaréz kiemelő (`--accent: #c9a45c`; világos háttéren a mélyebb bronz `--accent-deep: #9c7a3a` az olvashatóságért). Minden szín az `assets/css/style.css` elején lévő tokenekben állítható.
+- **Színrendszer:** sötét türkizkék alap (`--ink: #0e2a33`), menta papír (`--paper: #eef8f4`) és türkiz kiemelő (`--accent: #52bfa5`; világos háttéren a mélyebb `--accent-deep: #1f7a66` az olvashatóságért), a „Tartozz közénk!” plakátból. Minden szín az `assets/css/style.css` elején lévő tokenekben állítható.
 
 - **WebGL „védőgömb”** (`assets/js/orb-gl.js`): raymarcholt, zajjal torzított gömb, egérre és görgetésre reagál; WebGL nélkül 2D részecske-gömb a tartalék.
 - **Mozgás:** első látogatáskor betöltő animáció, körbe nyíló oldalváltás, sima görgetés (Lenis), szavanként/betűnként beúszó címek, görgetésre kivilágosodó kiáltvány, vízszintesen görgetett szolgáltatás-kártyák, egymásra csúszó lépések, mágneses gombok, egyedi kurzor (GSAP + ScrollTrigger).

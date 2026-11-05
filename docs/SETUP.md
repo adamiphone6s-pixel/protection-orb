@@ -39,7 +39,7 @@ Supabase → **Project Settings** → **API**. Két kulcs kell:
 window.VK_CONFIG = {
   supabaseUrl: "https://XXXX.supabase.co",
   supabaseAnonKey: "eyJ...anon...",
-  memberEmailDomain: "tag.vedokor.local"
+  memberEmailDomain: "tag.chinoinvdsz.local"
 };
 ```
 
@@ -49,14 +49,14 @@ Vercel → Project → **Settings → Environment Variables** (Production + Prev
 |---|---|
 | `SUPABASE_URL` | `https://XXXX.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | a `service_role` kulcs |
-| `MEMBER_EMAIL_DOMAIN` | `tag.vedokor.local` (egyezzen a config.js-sel) |
+| `MEMBER_EMAIL_DOMAIN` | `tag.chinoinvdsz.local` (egyezzen a config.js-sel) |
 
 Utána: commit + push (vagy Vercel → **Redeploy**), hogy a változók életbe lépjenek.
 
 ## 5. Első admin létrehozása
 
 1. Supabase → **Authentication → Users → Add user → Create new user**
-   - Email: `adm-001@tag.vedokor.local` (a tagi kód kisbetűvel + `@` + a domain)
+   - Email: `adm-001@tag.chinoinvdsz.local` (a tagi kód kisbetűvel + `@` + a domain)
    - Password: erős jelszó
    - **Auto Confirm User: BE**
 2. SQL Editor → futtasd:
@@ -64,7 +64,7 @@ Utána: commit + push (vagy Vercel → **Redeploy**), hogy a változók életbe 
 ```sql
 insert into public.members (user_id, code, name, role, must_change_password)
 select id, 'ADM-001', 'Ádám', 'admin', false
-from auth.users where email = 'adm-001@tag.vedokor.local';
+from auth.users where email = 'adm-001@tag.chinoinvdsz.local';
 ```
 
 3. Nyisd meg: `https://<domain>/admin.html` → belépés `ADM-001` kóddal.
@@ -94,7 +94,7 @@ A tagok első belépéskor kötelezően saját jelszót állítanak be. Elfelejt
 
 ## Hogyan működik (röviden)
 
-- **Belépés:** a tagi kódból a rendszer technikai e-mail címet képez (`ph-1001@tag.vedokor.local`), ezzel lép be a Supabase-be. A munkamenet a böngésző bezárásáig tart.
+- **Belépés:** a tagi kódból a rendszer technikai e-mail címet képez (`ph-1001@tag.chinoinvdsz.local`), ezzel lép be a Supabase-be. A munkamenet a böngésző bezárásáig tart.
 - **Jogosultság:** az adatbázis soronkénti szabályai (RLS) döntenek — a tag a szervertől is csak a saját vállalata sorát és dokumentumait kapja meg.
 - **Dokumentumok:** privát tárhely, vállalatonként külön mappa, a letöltőlink 1 óráig érvényes.
 - **Tagkezelés:** az `/api/admin` szerveroldali függvény végzi (service role kulccsal), és csak bejelentkezett admint szolgál ki.

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Védőkör — adatréteg
+   Chinoin VDSZ — adatréteg
    Éles módban Supabase (belépés, adatbázis, dokumentumtár), különben demó mód
    a helyi JSON fájlokkal. A felület kódja csak ezt az API-t hívja.
    ========================================================================== */
@@ -7,7 +7,7 @@
   "use strict";
   const cfg = window.VK_CONFIG || {};
   const live = !!(cfg.supabaseUrl && cfg.supabaseAnonKey);
-  const domain = cfg.memberEmailDomain || "tag.vedokor.local";
+  const domain = cfg.memberEmailDomain || "tag.chinoinvdsz.local";
   let client = null;
   let loading = null;
 

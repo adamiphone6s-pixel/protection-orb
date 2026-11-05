@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Védőkör — admin API (Vercel serverless függvény, függőség nélkül)
+   Chinoin VDSZ — admin API (Vercel serverless függvény, függőség nélkül)
 
    Csak bejelentkezett ADMIN hívhatja. Feladata a tagok (Supabase auth
    felhasználók) létrehozása, törlése és jelszavuk visszaállítása — ehhez a
@@ -8,7 +8,7 @@
    Környezeti változók (Vercel → Project → Settings → Environment Variables):
      SUPABASE_URL               pl. https://abcd.supabase.co
      SUPABASE_SERVICE_ROLE_KEY  Supabase → Project Settings → API → service_role
-     MEMBER_EMAIL_DOMAIN        (opcionális) alapértelmezés: tag.vedokor.local
+     MEMBER_EMAIL_DOMAIN        (opcionális) alapértelmezés: tag.chinoinvdsz.local
    ========================================================================== */
 "use strict";
 
@@ -16,7 +16,7 @@ const crypto = require("crypto");
 
 const URL_BASE = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-const EMAIL_DOMAIN = process.env.MEMBER_EMAIL_DOMAIN || "tag.vedokor.local";
+const EMAIL_DOMAIN = process.env.MEMBER_EMAIL_DOMAIN || "tag.chinoinvdsz.local";
 const MAX_IMPORT = 2000;
 
 const CODE_RE = /^[A-Z0-9-]{3,20}$/;

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Védőkör — WebGL „folyékony védőgömb”
+   Chinoin VDSZ — WebGL „folyékony védőgömb”
    Raymarcholt, zajjal torzított gömb márkaszínekkel, irizáló pereme reagál
    az egérre és a görgetésre. Ha nincs WebGL, false-t ad vissza (2D fallback).
    ========================================================================== */
@@ -67,10 +67,10 @@ void main(){
   vec3 rd=normalize(vec3(uv,-1.75));
 
   // Paletta: sötét smaragd üveg, krém stúdiófény, sárgaréz peremfény
-  vec3 accent=vec3(.84,.68,.38);
-  vec3 ember=vec3(.05,.3,.21);
-  vec3 bone=vec3(.96,.93,.86);
-  vec3 graphite=vec3(.025,.07,.055);
+  vec3 accent=vec3(.32,.75,.65);
+  vec3 ember=vec3(.05,.24,.3);
+  vec3 bone=vec3(.93,.97,.96);
+  vec3 graphite=vec3(.02,.07,.09);
 
   // Befoglaló gömb — a sugarak nagy része gyorsan kilép
   float b=dot(ro,rd);float c=dot(ro,ro)-1.55*1.55;float h=b*b-c;

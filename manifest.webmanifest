@@ -1,12 +1,12 @@
 {
-  "name": "Védőkör Szakszervezet",
-  "short_name": "Védőkör",
+  "name": "Chinoin VDSZ Szakszervezet",
+  "short_name": "Chinoin VDSZ",
   "description": "Munkavállalói érdekképviselet — hírek, jogsegély és vállalati tagi felület.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0f1c17",
-  "theme_color": "#0f1c17",
+  "background_color": "#0e2a33",
+  "theme_color": "#0e2a33",
   "lang": "hu",
   "icons": [
     { "src": "assets/img/icon.svg", "sizes": "any", "type": "image/svg+xml" },

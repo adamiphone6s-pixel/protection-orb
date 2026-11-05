@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Védőkör — közös motor: layout, nyelv, mozgás, hírek, űrlapok, PWA
+   Chinoin VDSZ — közös motor: layout, nyelv, mozgás, hírek, űrlapok, PWA
    Külső függőségek (opcionálisak, helyben kiszolgálva): GSAP + ScrollTrigger, Lenis.
    Nélkülük is minden működik, csak egyszerűbb animációkkal.
    ========================================================================== */
@@ -87,11 +87,7 @@
   const ARROW = icon("arrow", ' class="arrow" width="18" height="18"');
   const roll = (key) => '<span class="roll"><span data-i18n="' + key + '"></span></span>';
 
-  const LOGO_MARK =
-    '<svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">' +
-    '<defs><radialGradient id="lg" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#6f8a7e"/><stop offset=".45" stop-color="#1f302a"/><stop offset="1" stop-color="#0f1c17"/></radialGradient></defs>' +
-    '<circle cx="20" cy="20" r="14" fill="url(#lg)" stroke="currentColor" stroke-opacity=".18"/>' +
-    '<ellipse cx="20" cy="20" rx="19" ry="7" fill="none" stroke="#c9a45c" stroke-width="1.8" transform="rotate(-24 20 20)"/></svg>';
+  const LOGO_MARK = '<span class="logo-mark" aria-hidden="true"></span>';
 
   /* ================= Layout ================= */
   const NAV = [
@@ -109,7 +105,7 @@
     header.className = "site-header";
     header.innerHTML =
       '<div class="container header-inner">' +
-      '<a class="logo" href="index.html" aria-label="Védőkör">' + LOGO_MARK + '<span><span data-i18n="brand.name"></span><small data-i18n="brand.tag"></small></span></a>' +
+      '<a class="logo" href="index.html" aria-label="Chinoin VDSZ">' + LOGO_MARK + '<span><span data-i18n="brand.name"></span><small data-i18n="brand.tag"></small></span></a>' +
       '<nav class="main-nav" aria-label="Fő navigáció"><ul>' +
       NAV.filter((n) => n.page !== "home").map((n) =>
         '<li><a href="' + n.href + '"' + (n.page === page ? ' aria-current="page"' : "") + ">" + roll(n.key) + "</a></li>").join("") +
@@ -133,7 +129,7 @@
       NAV.map((n, i) => '<li><a class="mm-link" href="' + n.href + '"' + (n.page === page ? ' aria-current="page"' : "") + "><small>0" + (i + 1) + '</small><span data-i18n="' + n.key + '"></span></a></li>').join("") +
       "</ul></nav>" +
       '<div class="mm-foot"><a class="btn btn--volt btn--block" href="login.html"><span data-i18n="nav.members"></span>' + ARROW + "</a>" +
-      '<div class="mm-contact"><a href="mailto:info@vedokor.hu">info@vedokor.hu</a><a href="tel:+3610000000">+36 1 000 0000</a></div></div>';
+      '<div class="mm-contact"><a href="mailto:chinoinvdsz@gmail.com">chinoinvdsz@gmail.com</a><a href="tel:+3615051678">06-1-505-1678</a></div></div>';
 
     document.body.prepend(menu);
     document.body.prepend(header);
@@ -175,21 +171,20 @@
       '<div class="container"><div class="footer-grid">' +
       '<div><a class="logo" href="index.html">' + LOGO_MARK + '<span><span data-i18n="brand.name"></span><small data-i18n="brand.tag"></small></span></a>' +
       '<p data-i18n="footer.about"></p>' +
-      '<div class="socials"><a href="#" aria-label="Facebook" data-magnetic>' + icon("fb") + '</a><a href="#" aria-label="Instagram" data-magnetic>' + icon("ig") + '</a><a href="#" aria-label="YouTube" data-magnetic>' + icon("yt") + "</a></div></div>" +
+      "</div>" +
       '<div><h4 data-i18n="footer.nav"></h4><ul>' + NAV.map((n) => '<li><a href="' + n.href + '">' + roll(n.key) + "</a></li>").join("") + "</ul></div>" +
       '<div><h4 data-i18n="nav.members"></h4><ul>' +
       '<li><a href="login.html">' + roll("login.title") + "</a></li>" +
       '<li><a href="join.html">' + roll("nav.join") + "</a></li>" +
       '<li><a href="privacy.html">' + roll("footer.privacy") + "</a></li></ul></div>" +
       '<div><h4 data-i18n="footer.contact"></h4><ul>' +
-      '<li><a href="mailto:info@vedokor.hu">info@vedokor.hu</a></li>' +
-      '<li><a href="tel:+3610000000">+36 1 000 0000</a></li>' +
-      '<li><span class="muted" data-i18n="contact.address"></span></li></ul></div>' +
+      '<li><a href="mailto:chinoinvdsz@gmail.com">chinoinvdsz@gmail.com</a></li>' +
+      '<li><a href="tel:+3615051678">06-1-505-1678</a></li></ul></div>' +
       "</div>" +
       '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' <span data-i18n="brand.name"></span> <span data-i18n="brand.tag"></span>. <span data-i18n="footer.rights"></span></span>' +
       '<button type="button" class="install-link" hidden data-i18n="footer.install"></button>' +
       '<a href="#main" class="to-top" data-top>' + icon("arrowUp", ' width="16" height="16"') + '<span class="roll"><span data-i18n="footer.top"></span></span></a></div></div>' +
-      '<div class="footer-word" aria-hidden="true">' + "Védőkör".split("").map((c, i) => '<span style="--i:' + i + '">' + c + "</span>").join("") + "</div>";
+      '<div class="footer-word" aria-hidden="true">' + "Chinoin".split("").map((c, i) => '<span style="--i:' + i + '">' + c + "</span>").join("") + "</div>";
     document.body.appendChild(footer);
     footer.querySelector("[data-top]").addEventListener("click", (e) => {
       e.preventDefault();
@@ -451,13 +446,14 @@
   function initCounters() {
     const els = document.querySelectorAll("[data-count]");
     const fmt = () => new Intl.NumberFormat(lang === "hu" ? "hu-HU" : "en-GB");
-    const final = (el) => fmt().format(Number(el.dataset.count)) + (el.dataset.suffix || "");
+    const num = (el, v) => (el.dataset.plain !== undefined ? String(v) : fmt().format(v));
+    const final = (el) => num(el, Number(el.dataset.count)) + (el.dataset.suffix || "");
     function run(el) {
       if (reduceMotion) { el.textContent = final(el); return; }
       const target = Number(el.dataset.count), dur = 2200, s = performance.now();
       (function step(now) {
         const p = Math.min((now - s) / dur, 1), e = 1 - Math.pow(1 - p, 5);
-        el.textContent = fmt().format(Math.round(target * e)) + (el.dataset.suffix || "");
+        el.textContent = num(el, Math.round(target * e)) + (el.dataset.suffix || "");
         if (p < 1) requestAnimationFrame(step);
       })(s);
     }
@@ -636,13 +632,13 @@
   }
 
   /* ================= Hírek ================= */
-  const ART = [["#0f1c17", "#c9a45c"], ["#e5dfd2", "#0f1c17"], ["#c9a45c", "#0f1c17"], ["#1f302a", "#cfc6b3"], ["#cfc6b3", "#c9a45c"], ["#15241e", "#f1ece2"]];
+  const ART = [["#0e2a33", "#52bfa5"], ["#d7efe7", "#0e2a33"], ["#52bfa5", "#0e2a33"], ["#1d4457", "#bfe9dd"], ["#bfe9dd", "#52bfa5"], ["#133440", "#eef8f4"]];
   function newsArt(i) {
     const [a, b] = ART[i % ART.length];
     const shapes = [
-      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#f1ece2" opacity=".92"/>',
-      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#f1ece2"/>',
-      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#f1ece2" stroke-width="3" transform="rotate(-20 200 150)"/>',
+      '<circle cx="280" cy="170" r="150" fill="' + b + '"/><circle cx="110" cy="90" r="56" fill="#eef8f4" opacity=".92"/>',
+      '<rect x="-40" y="170" width="480" height="240" rx="120" fill="' + b + '" transform="rotate(-8 200 150)"/><circle cx="300" cy="84" r="48" fill="#eef8f4"/>',
+      '<circle cx="200" cy="150" r="120" fill="none" stroke="' + b + '" stroke-width="26"/><circle cx="200" cy="150" r="46" fill="' + b + '"/><ellipse cx="200" cy="150" rx="190" ry="54" fill="none" stroke="#eef8f4" stroke-width="3" transform="rotate(-20 200 150)"/>',
       '<path d="M0 300 C 80 60 180 60 240 180 S 360 280 400 120 V 300 Z" fill="' + b + '"/>'
     ];
     return '<svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="300" fill="' + a + '"/>' + shapes[i % shapes.length] + "</svg>";
@@ -704,7 +700,10 @@
     let filter = "all";
     function render() {
       loadNews().then((items) => {
-        if (home) home.innerHTML = items.slice(0, 3).map((it, i) => newsCardHTML(it, i, i === 0)).join("");
+        if (home) {
+          home.closest("section").hidden = !items.length;
+          home.innerHTML = items.slice(0, 3).map((it, i) => newsCardHTML(it, i, i === 0)).join("");
+        }
         if (list) {
           const chips = document.querySelector("[data-news-chips]");
           const cats = ["all"].concat([...new Set(items.map((i) => i.category))]);

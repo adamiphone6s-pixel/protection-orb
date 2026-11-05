@@ -1,8 +1,35 @@
 {
   "_info": "CSAK DEMÓ! Éles rendszerben a tagi hitelesítés szerveroldalon történik, ez a fájl ott nem létezik. hash = SHA-256('TAGKÓD:jelszó').",
   "members": [
-    { "code": "PH-1001", "name": "Anna", "company": "minta-pharma", "hash": "497adb32345ff4a059f3d1db6dbe9cf584c4bb9dcf6794eceeb260b9b26cc38e" },
-    { "code": "EN-2001", "name": "Bence", "company": "minta-energia", "hash": "aca9f0ae4355798f1c0af19966525bad45903d41e37db4294668bbdce951e587" },
-    { "code": "CH-3001", "name": "Csilla", "company": "minta-vegyipar", "hash": "29dc9dbd0a5f7e0c99f0db1fdea5327365ed6a2927b666197965211ddd2a0200" }
+    {
+      "code": "CH-1001",
+      "name": "Kolléga",
+      "company": "chinoin",
+      "hash": "939f07edee659067cda0f1b454c442e3cbe42ae6af23751e4ca41cc8009a5d89"
+    },
+    {
+      "code": "EA-2001",
+      "name": "Kolléga",
+      "company": "euroapi-hungary",
+      "hash": "aa9aa93dff6dd6fc599f5119f0605bd87adfc01a2973447543ba0386d66f94f3"
+    },
+    {
+      "code": "OC-3001",
+      "name": "Kolléga",
+      "company": "opella-commercial",
+      "hash": "b2a0b852a6028963bfe0d44bd70d8111ec9de216be662cfecd05c845ab3d857c"
+    },
+    {
+      "code": "OH-4001",
+      "name": "Kolléga",
+      "company": "opella-hungary",
+      "hash": "4fad892a31c7314cf78d58dc217439782a65aae63aa8ff60969919d94f16a371"
+    },
+    {
+      "code": "SA-5001",
+      "name": "Kolléga",
+      "company": "sanofi-aventis",
+      "hash": "b80a44a8edc546c446c4e29fa47e0f2043c6bb49237df3bb228773748755434a"
+    }
   ]
 }

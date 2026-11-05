@@ -1,0 +1,32 @@
+{
+  "_info": "Vállalati tagi tartalom — havonta frissítendő. A kétnyelvű mezők { hu, en } formátumúak.",
+  "id": "opella-commercial",
+  "name": "Opella Healthcare Commercial Kft.",
+  "short": "OC",
+  "accent": "#52bfa5",
+  "updated": "2026-11-05",
+  "memberCount": 0,
+  "highlight": {
+    "title": {
+      "hu": "Az anyagok feltöltése folyamatban",
+      "en": "Documents are being uploaded"
+    },
+    "text": {
+      "hu": "A vállalati dokumentumok, a bizalmik elérhetősége és az események hamarosan itt lesznek.",
+      "en": "Company documents, shop-steward contacts and events will appear here soon."
+    }
+  },
+  "wages": {
+    "increase": "",
+    "note": {
+      "hu": "",
+      "en": ""
+    },
+    "bands": [],
+    "benefits": []
+  },
+  "news": [],
+  "documents": [],
+  "contacts": [],
+  "events": []
+}

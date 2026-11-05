@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Védőkör — admin felület
+   Chinoin VDSZ — admin felület
    Hírek, vállalati tagi tartalmak (dokumentumfeltöltéssel), tagkezelés és
    beérkezett űrlapok. Csak éles (Supabase) módban működik; a jogosultságot
    az adatbázis RLS szabályai és a szerveroldali /api/admin függvény érvényesítik.
@@ -122,7 +122,7 @@
           '<div class="fgrid">' + f.item.map((sf) => field(sf, it[sf.k], path + "." + i + "." + sf.k)).join("") + "</div></div>").join("") +
         '<button type="button" class="add-btn" data-add="' + path + '">' + ic("plus", 16) + " " + esc(f.addLabel || "Új elem") + "</button></div></div>";
     }
-    if (f.t === "color" && !value) value = "#c9a45c";
+    if (f.t === "color" && !value) value = "#52bfa5";
     const type = f.t === "number" ? "number" : f.t === "date" ? "date" : f.t === "color" ? "color" : f.t === "email" ? "email" : "text";
     return '<label class="fld' + full + '">' + lbl + '<input class="in" type="' + type + '" data-path="' + path + '"' + (type === "number" ? ' data-type="num"' : "") +
       ' value="' + esc(value == null ? "" : value) + '"' + (f.req ? " required" : "") + (f.ph ? ' placeholder="' + esc(f.ph) + '"' : "") + "></label>";
@@ -177,7 +177,7 @@
 
   function shell() {
     root.innerHTML =
-      '<aside class="app-side" aria-label="Admin menü"><a class="logo" href="index.html">' + (window.VK && VK.logo ? VK.logo : "") + '<span><span>Védőkör</span><small>Admin</small></span></a>' +
+      '<aside class="app-side" aria-label="Admin menü"><a class="logo" href="index.html">' + (window.VK && VK.logo ? VK.logo : "") + '<span><span>Chinoin VDSZ</span><small>Admin</small></span></a>' +
       '<div class="app-side-label">Kezelés</div><nav class="app-nav"><span class="ind" aria-hidden="true"></span>' +
       VIEWS.map(([k, l, i]) => '<a href="#' + k + '" data-view="' + k + '"' + (k === view ? ' aria-current="page"' : "") + ">" + ic(i, 20) + "<span>" + l + '</span><span class="count" data-count="' + k + '" hidden></span></a>').join("") +
       '</nav><div class="app-me"><div class="row"><span class="badge" style="width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--accent);color:var(--ink);font-weight:800">' + esc((me.name || "A").slice(0, 1)) + "</span><div><b>" + esc(me.name) + "</b><small>" + esc(me.code) + " · admin</small></div></div>" +
@@ -344,7 +344,7 @@
         if (!id) return;
         if (!/^[a-z0-9-]{2,60}$/.test(id)) return notify("Hibás azonosító: csak kisbetű, szám és kötőjel.", true);
         const short = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-        const content = { short, accent: "#c9a45c", updated: today(), memberCount: 0, highlight: { title: { hu: "", en: "" }, text: { hu: "", en: "" } }, wages: { increase: "", note: { hu: "", en: "" }, bands: [], benefits: [] }, news: [], events: [], contacts: [], documents: [] };
+        const content = { short, accent: "#52bfa5", updated: today(), memberCount: 0, highlight: { title: { hu: "", en: "" }, text: { hu: "", en: "" } }, wages: { increase: "", note: { hu: "", en: "" }, bands: [], benefits: [] }, news: [], events: [], contacts: [], documents: [] };
         try {
           const sb = await B.ready();
           B.unwrap(await sb.from("companies").insert({ id, name, content }));
@@ -458,7 +458,7 @@
     el.onchange = (e) => { if (e.target.matches("[data-mem-co]")) { memFilter.co = e.target.value; render(); } };
     el.onclick = async (e) => {
       if (e.target.closest("[data-mem-export]")) {
-        csvDownload("vedokor-tagok-" + today() + ".csv", [["Tagi kód", "Név", "Vállalat", "Szerep", "Állapot"]].concat(shown.map((m) => [m.code, m.name, coName(m.company_id), m.role, m.must_change_password ? "még nem lépett be" : "aktív"])));
+        csvDownload("chinoinvdsz-tagok-" + today() + ".csv", [["Tagi kód", "Név", "Vállalat", "Szerep", "Állapot"]].concat(shown.map((m) => [m.code, m.name, coName(m.company_id), m.role, m.must_change_password ? "még nem lépett be" : "aktív"])));
       }
       if (e.target.closest("[data-mem-new]")) memberNew();
       if (e.target.closest("[data-mem-import]")) memberImport();
@@ -520,7 +520,7 @@
       '<div class="note">Soronként egy tag: <span class="mono">Név;vállalat-azonosító;tagi kód</span> (a kód elhagyható — akkor automatikus). Excelből: mentés „CSV (pontosvesszővel tagolt)” formátumban.<br>Vállalat-azonosítók: ' +
       companies.map((c) => '<span class="mono">' + esc(c.id) + "</span>").join(", ") + "</div>" +
       '<label class="mini-btn" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;justify-self:start">' + ic("upload", 15) + ' CSV fájl választása<input type="file" accept=".csv,.txt" data-csv hidden></label>' +
-      '<textarea class="in tall" data-csv-text placeholder="Kiss Anna;minta-pharma&#10;Nagy Béla;minta-pharma;MP-2001"></textarea>' +
+      '<textarea class="in tall" data-csv-text placeholder="Kiss Anna;chinoin&#10;Nagy Béla;chinoin;CH-2001"></textarea>' +
       '<p class="muted" data-csv-info style="font-size:14px"></p><div data-result></div>' +
       '<div class="drawer-foot"><span></span><button class="btn btn--volt btn--sm" data-go>' + ic("check", 16) + "<span>Importálás</span></button></div>");
     const ta = panel.querySelector("[data-csv-text]"), info = panel.querySelector("[data-csv-info]");
@@ -536,7 +536,7 @@
     };
     panel.onclick = async (e) => {
       const dlb = e.target.closest("[data-dl]");
-      if (dlb) { csvDownload("vedokor-uj-tagok-" + today() + ".csv", JSON.parse(dlb.dataset.dl)); return; }
+      if (dlb) { csvDownload("chinoinvdsz-uj-tagok-" + today() + ".csv", JSON.parse(dlb.dataset.dl)); return; }
       if (!e.target.closest("[data-go]")) return;
       const rows = parseCsv(ta.value);
       if (!rows.length) return notify("Nincs importálható sor.", true);

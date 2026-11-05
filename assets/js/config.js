@@ -7,5 +7,5 @@
 window.VK_CONFIG = {
   supabaseUrl: "",       // pl. "https://abcdefgh.supabase.co"
   supabaseAnonKey: "",   // Supabase → Project Settings → API → anon public
-  memberEmailDomain: "tag.vedokor.local" // egyezzen a Vercel MEMBER_EMAIL_DOMAIN értékével
+  memberEmailDomain: "tag.chinoinvdsz.local" // egyezzen a Vercel MEMBER_EMAIL_DOMAIN értékével
 };
